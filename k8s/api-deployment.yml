@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foi-rag-api
+  namespace: foi-rag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foi-rag-api
+  template:
+    metadata:
+      labels:
+        app: foi-rag-api
+    spec:
+      containers:
+        - name: foi-rag-api
+          image: sgroil/foi-rag-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: app-secrets
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "1"
+              memory: 2Gi
