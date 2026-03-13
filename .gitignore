@@ -1,0 +1,13 @@
+# Environment
+.env
+
+# Corpus
+camden_foi_random_pdfs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# uv
+.python-version
