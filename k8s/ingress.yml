@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: foi-rag
+  namespace: foi-rag
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  rules:
+    - host: foi-rag.sgroi.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: foi-rag-api
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - foi-rag.sgroi.dev
+      secretName: foi-rag-tls
