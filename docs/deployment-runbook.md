@@ -10,26 +10,8 @@ Complete checklist for deploying foi-rag to the Hetzner CX33 server.
 
 ## One-time server setup
 
-- [ ] SSH in as root: `ssh root@135.181.255.239`
-- [ ] Create deploy user:
-  ```bash
-  adduser --disabled-password deploy
-  usermod -aG sudo deploy
-  echo "deploy ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/deploy
-  mkdir -p /home/deploy/.ssh
-  cp /root/.ssh/authorized_keys /home/deploy/.ssh/authorized_keys
-  chown -R deploy:deploy /home/deploy/.ssh
-  chmod 700 /home/deploy/.ssh
-  chmod 600 /home/deploy/.ssh/authorized_keys
-  ```
-- [ ] Test in a new terminal: `ssh deploy@135.181.255.239 && sudo whoami` (should print `root`)
-- [ ] Harden SSH (`sudo nano /etc/ssh/sshd_config`):
-  ```
-  PermitRootLogin no
-  PasswordAuthentication no
-  PubkeyAuthentication yes
-  ```
-  Then: `sudo sshd -t && sudo systemctl restart ssh`
+- [x] SSH access already configured — connect as: `ssh sgroil@135.181.255.239 -i ~/.ssh/fac_key`
+- [x] Deploy user (`sgroil`) already exists with sudo access
 - [ ] Open firewall:
   ```bash
   sudo ufw allow 22/tcp
@@ -62,9 +44,9 @@ Complete checklist for deploying foi-rag to the Hetzner CX33 server.
   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml
   ```
 - [ ] Wait for cert-manager pods: `kubectl get pods -n cert-manager --watch` (all three Running, Ctrl+C when done)
-- [ ] Clone the repo on the server:
+- [ ] Clone the repo on the server (you're already in `~/workshop` — clone there or wherever you like):
   ```bash
-  git clone https://github.com/<your-org>/foi-rag.git
+  git clone https://github.com/sgroil/foi-rag.git
   cd foi-rag
   ```
 - [ ] Apply ClusterIssuer: `kubectl apply -f k8s/cluster-issuer.yml`
