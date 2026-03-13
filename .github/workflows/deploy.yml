@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/foi-rag-api:${{ github.sha }}
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > ~/.kube/config
+
+      - name: Apply manifests
+        run: kubectl apply -f k8s/
+
+      - name: Update image
+        run: |
+          kubectl set image deployment/foi-rag-api \
+            foi-rag-api=${{ secrets.DOCKERHUB_USERNAME }}/foi-rag-api:${{ github.sha }} \
+            --namespace foi-rag
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/foi-rag-api \
+            --namespace foi-rag \
+            --timeout=120s
