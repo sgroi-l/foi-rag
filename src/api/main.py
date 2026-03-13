@@ -2,6 +2,7 @@ import json
 import os
 from contextlib import asynccontextmanager
 from datetime import date
+from pathlib import Path
 
 import asyncpg
 from dotenv import load_dotenv
@@ -16,6 +17,11 @@ from src.retrieval.reranker import rerank
 from src.retrieval.search import vector_search
 
 
+def read_schema_sql() -> str:
+    schema_path = Path(__file__).parent.parent.parent / "src" / "db" / "schema.sql"
+    return schema_path.read_text()
+
+
 pool: asyncpg.Pool | None = None
 
 
@@ -23,6 +29,8 @@ pool: asyncpg.Pool | None = None
 async def lifespan(app: FastAPI):
     global pool
     pool = await asyncpg.create_pool(os.environ["DATABASE_URL"])
+    async with pool.acquire() as conn:
+        await conn.execute(read_schema_sql())
     yield
     await pool.close()
 
