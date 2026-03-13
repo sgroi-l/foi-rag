@@ -1,11 +1,11 @@
 from openai import OpenAI
 
-client = OpenAI()
 BATCH_SIZE = 128
 MODEL = "text-embedding-3-small"
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
+    client = OpenAI()
     embeddings = []
     for i in range(0, len(texts), BATCH_SIZE):
         batch = texts[i : i + BATCH_SIZE]
