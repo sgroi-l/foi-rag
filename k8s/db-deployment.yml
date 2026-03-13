@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foi-rag-db
+  namespace: foi-rag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foi-rag-db
+  template:
+    metadata:
+      labels:
+        app: foi-rag-db
+    spec:
+      containers:
+        - name: foi-rag-db
+          image: pgvector/pgvector:pg16
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: db-secrets
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - foi
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - foi
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 768Mi
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: foi-rag-db-pvc

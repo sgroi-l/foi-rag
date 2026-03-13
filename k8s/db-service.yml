@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: foi-rag-db
+  namespace: foi-rag
+spec:
+  type: ClusterIP
+  selector:
+    app: foi-rag-db
+  ports:
+    - port: 5432
+      targetPort: 5432
