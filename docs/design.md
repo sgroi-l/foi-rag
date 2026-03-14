@@ -32,7 +32,7 @@ camden_foi_random_pdfs/
 | Metadata source | CSV (not regex) | `Identifier`, `Document Date`, `Document Title` are already structured |
 | Chunking | Page-based (split if >800 tokens) | Natural citation unit — "document X, page 3" is human-readable |
 | Retrieval improvement | Pre-filter by metadata before vector search | Clean SQL WHERE clause, exposed as optional API params |
-| Re-ranking | Skip (stretch goal) | Metadata filtering is the Day 1 improvement |
+| Re-ranking | Claude Haiku LLM re-ranker | Implemented in `src/retrieval/reranker.py`; uses Haiku to order candidates by relevance before generation |
 | Generation | Claude claude-sonnet-4-6 | Anthropic API required by brief |
 | API | FastAPI | Required by brief |
 
@@ -141,24 +141,23 @@ foi-rag/
 │   └── design.md
 └── src/
     ├── db/
-    │   ├── schema.sql            # all CREATE TABLE / INDEX statements
-    │   ├── connection.py         # asyncpg connection pool (singleton)
-    │   └── queries.py            # typed async SQL helper functions
+    │   └── schema.sql            # all CREATE TABLE / INDEX statements (IF NOT EXISTS)
     ├── ingestion/
     │   ├── metadata.py           # load_metadata(csv_path) → dict[filename, MetadataRow]
     │   ├── extractor.py          # PyMuPDF: extract_pages(pdf_path) → list[(page_num, text)]
     │   ├── chunker.py            # chunk_pages(pages, max_tokens=800) → list[Chunk]
     │   ├── embedder.py           # embed_texts(texts) → list[list[float]], batch size 128
-    │   └── pipeline.py           # ingest_file(pdf_path, metadata, db_pool): hash check → extract → chunk → embed → insert
+    │   └── pipeline.py           # ingest_file(pdf_path, metadata, db_pool)
     ├── retrieval/
-    │   ├── retriever.py          # retrieve(query_embedding, filters, top_k, db_pool) → list[ChunkResult]
-    │   └── generator.py          # generate(question, chunks) → GeneratedAnswer with citations
+    │   ├── search.py             # vector_search(embedding, pool, top_k, filters) → list[SearchResult]
+    │   ├── reranker.py           # rerank(query, results, top_k) → list[SearchResult] via Claude Haiku
+    │   └── generator.py          # generate_answer(question, chunks) → GeneratedAnswer with citations
     └── api/
-        ├── main.py               # FastAPI app, lifespan (DB pool init/close)
-        ├── models.py             # Pydantic request/response types
+        ├── main.py               # FastAPI app, lifespan (DB pool init/close), router registration
+        ├── models.py             # Pydantic request/response models
         └── routes/
-            ├── ingest.py         # POST /ingest
             ├── query.py          # POST /query
+            ├── ingest.py         # POST /ingest
             └── documents.py      # GET /documents, GET /logs/{id}
 scripts/
     └── ingest_all.py             # CLI: uv run scripts/ingest_all.py ./camden_foi_random_pdfs/
@@ -183,25 +182,21 @@ Skips files whose hash matches ingestion_log. Re-ingests if hash changed.
 ```json
 // Request
 {
-  "question": "What is Camden's policy on temporary accommodation?",
-  "filters": {
-    "date_from": "2022-01-01",
-    "date_to": "2024-12-31",
-    "foi_reference": "CAM6854"
-  },
-  "top_k": 5
+  "query": "What is Camden's policy on temporary accommodation?",
+  "top_k": 5,
+  "date_from": "2022-01-01",
+  "date_to": "2024-12-31"
 }
 
 // Response
 {
-  "answer": "Camden's policy states... [1]. Applications are... [2].",
+  "answer": "Camden's policy states... [SOURCE 1].",
   "citations": [
     {
-      "ref": 1,
-      "document": "03_CAM6854_the number of temporary accommodation properties.pdf",
       "foi_reference": "CAM6854",
-      "page": 2,
-      "excerpt": "The waiting list is managed by..."
+      "title": "the number of temporary accommodation properties",
+      "page_number": 2,
+      "chunk_id": "uuid-of-chunk"
     }
   ],
   "query_id": "uuid-to-look-up-full-log"
@@ -211,11 +206,40 @@ Skips files whose hash matches ingestion_log. Re-ingests if hash changed.
 ### `GET /documents`
 Returns list of all indexed documents with metadata.
 
+```json
+// Response — array of document objects
+[
+  {
+    "id": "uuid",
+    "filename": "01_CAM6551_asylum seeker accommodation.pdf",
+    "foi_reference": "CAM6551",
+    "date": "2023-12-20",
+    "title": "Asylum seeker accommodation",
+    "total_pages": 4,
+    "indexed_at": "2024-01-15T10:30:00Z"
+  }
+]
+```
+
 ### `GET /logs/{query_id}`
 Returns full query log: filters applied, retrieved chunk contents, full prompt sent to Claude, full response.
 
+```json
+// Response
+{
+  "id": "uuid",
+  "query": "What is Camden's policy?",
+  "filters": {"date_from": "None", "date_to": "None"},
+  "retrieved_chunk_ids": ["uuid1", "uuid2"],
+  "prompt_sent": "...",
+  "response": "...",
+  "model": "claude-sonnet-4-6",
+  "queried_at": "2024-01-15T10:30:00Z"
+}
+```
+
 ### `GET /health`
-Returns `{ "status": "ok", "chunks_indexed": N }`.
+Returns `{ "status": "ok" }`.
 
 ---
 
@@ -323,7 +347,7 @@ Answer:
 
 ## Verification Plan
 
-1. **Docker smoke test:** `docker compose up -d` → `GET /health` returns 200 with chunk count > 0
+1. **Docker smoke test:** `docker compose up -d` → `GET /health` returns 200 `{"status": "ok"}`
 2. **Ingestion idempotency:** run `ingest_all.py` twice → second run: all skipped, 0 failed
 3. **Citation traceability:** take `[N]` from an answer → `GET /logs/{query_id}` → find chunk → open PDF page N → text matches
 4. **Metadata filtering:** query with `date_from=2023-01-01` → all citation docs dated 2023+
