@@ -35,7 +35,7 @@ async def query(request: Request, body: QueryRequest):
                VALUES ($1, $2, $3, $4, $5, $6)
                RETURNING id""",
             body.query,
-            json.dumps({"date_from": str(body.date_from), "date_to": str(body.date_to)}),
+            json.dumps({"date_from": body.date_from.isoformat() if body.date_from else None, "date_to": body.date_to.isoformat() if body.date_to else None}),
             [c.chunk_id for c in answer.citations],
             answer.prompt_sent,
             answer.answer,

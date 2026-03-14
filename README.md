@@ -40,9 +40,6 @@ docker compose logs -f db
 ### Database
 
 ```bash
-# Apply schema (first time, or after a reset)
-docker compose exec -T db psql -U foi -d foi < src/db/schema.sql
-
 # Open a psql shell
 docker compose exec db psql -U foi -d foi
 
@@ -89,6 +86,12 @@ curl -s -X POST http://localhost:8000/query \
   -H "Content-Type: application/json" \
   -d '{"query": "temporary accommodation", "date_from": "2023-01-01", "date_to": "2024-12-31"}' \
   | python3 -m json.tool
+
+# List all indexed documents
+curl -s http://localhost:8000/documents | python3 -m json.tool
+
+# Get full log for a query (prompt sent, chunks retrieved, response)
+curl -s http://localhost:8000/logs/<query_id> | python3 -m json.tool
 ```
 
 ---
@@ -99,18 +102,15 @@ curl -s -X POST http://localhost:8000/query \
 # 1. Start the database
 docker compose up -d db
 
-# 2. Apply the schema
-docker compose exec -T db psql -U foi -d foi < src/db/schema.sql
-
-# 3. Download the corpus
+# 2. Download the corpus
 uv run python3 scripts/download_pdfs.py
 
-# 4. Ingest
+# 3. Ingest
 uv run python3 scripts/ingest_all.py
 
-# 5. Start the API
+# 4. Start the API
 uv run uvicorn src.api.main:app --reload
 
-# 6. Test
+# 5. Test
 curl http://localhost:8000/health
 ```

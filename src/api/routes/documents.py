@@ -1,4 +1,5 @@
 import asyncpg
+import json
 import uuid
 from fastapi import APIRouter, HTTPException, Request
 
@@ -46,7 +47,7 @@ async def get_log(query_id: uuid.UUID, request: Request):
     return QueryLog(
         id=str(row["id"]),
         query=row["query"],
-        filters=row["filters"],
+        filters=json.loads(row["filters"]) if isinstance(row["filters"], str) else row["filters"],
         retrieved_chunk_ids=[str(c) for c in row["retrieved_chunk_ids"]] if row["retrieved_chunk_ids"] else None,
         prompt_sent=row["prompt_sent"],
         response=row["response"],
