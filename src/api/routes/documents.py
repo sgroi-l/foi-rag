@@ -1,4 +1,5 @@
 import asyncpg
+import uuid
 from fastapi import APIRouter, HTTPException, Request
 
 from src.api.models import DocumentRecord, QueryLog
@@ -30,7 +31,7 @@ async def list_documents(request: Request):
 
 
 @router.get("/logs/{query_id}", response_model=QueryLog)
-async def get_log(query_id: str, request: Request):
+async def get_log(query_id: uuid.UUID, request: Request):
     pool: asyncpg.Pool = request.app.state.pool
     async with pool.acquire() as conn:
         row = await conn.fetchrow(

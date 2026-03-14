@@ -1,4 +1,5 @@
 import pytest
+import uuid as uuid_module
 from unittest.mock import AsyncMock, MagicMock
 from fastapi.testclient import TestClient
 
@@ -62,13 +63,14 @@ def test_get_log_returns_log(app_with_mock_pool):
     app, mock_pool = app_with_mock_pool
     import uuid
     log_id = str(uuid.uuid4())
+    chunk_uuid = uuid_module.uuid4()
 
     mock_conn = AsyncMock()
     mock_conn.fetchrow.return_value = {
         "id": log_id,
         "query": "test question",
         "filters": {"date_from": "None", "date_to": "None"},
-        "retrieved_chunk_ids": [],
+        "retrieved_chunk_ids": [chunk_uuid],
         "prompt_sent": "prompt",
         "response": "answer",
         "model": "claude-sonnet-4-6",
@@ -83,6 +85,7 @@ def test_get_log_returns_log(app_with_mock_pool):
     data = resp.json()
     assert data["query"] == "test question"
     assert data["model"] == "claude-sonnet-4-6"
+    assert data["retrieved_chunk_ids"] == [str(chunk_uuid)]
 
 
 def test_get_log_returns_404_when_not_found(app_with_mock_pool):
