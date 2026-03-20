@@ -165,7 +165,7 @@ def test_summarise_results_malformed_records():
     ]
     summary = summarise_results(records)
     assert summary["total"] == 4
-    # 2 hits: first record is True, third record defaults to False, second & fourth default to False
+    # 2 hits: records 1 (True) and 3 (True); records 2 and 4 default to False
     assert summary["recall"] == 0.5  # 2 hits / 4 total
     # scoreable: first (4) and fourth (3), mean = 3.5
     assert abs(summary["mean_faithfulness"] - 3.5) < 0.001
