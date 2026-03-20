@@ -15,6 +15,21 @@ uv sync
 
 ---
 
+## Quick start
+
+```bash
+make dev       # start db + run API locally with hot reload
+make up        # start everything in Docker
+make down      # stop everything
+make reset     # stop + wipe database volume
+make logs      # follow API logs (make logs s=db for db)
+make psql      # open a psql shell
+make download  # download FOI PDFs
+make ingest    # ingest PDFs into the database
+```
+
+---
+
 ## Command cheat sheet
 
 ### Docker
