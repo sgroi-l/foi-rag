@@ -25,6 +25,7 @@ from scripts.eval_utils import (
 
 QUESTION_SET_PATH = Path(__file__).parent.parent / "eval" / "question_set.json"
 RESULTS_DIR = Path(__file__).parent.parent / "eval"
+RERANK_TOP_K = 5
 
 FAITHFULNESS_PROMPT = """\
 You are evaluating a RAG system answer for faithfulness to its sources.
@@ -65,8 +66,8 @@ def _judge_faithfulness_sync(client: anthropic.Anthropic, question: str, chunks_
 
 
 async def evaluate_question(pool: asyncpg.Pool, client: anthropic.Anthropic, entry: dict) -> dict:
-    question = entry["question"]
-    expected_foi = entry["source_foi_reference"]
+    question = entry.get("question", "")
+    expected_foi = entry.get("source_foi_reference", "")
 
     # embed_texts is a blocking OpenAI HTTP call — run in a thread
     embedding = await asyncio.to_thread(embed_texts, [question])
@@ -75,7 +76,7 @@ async def evaluate_question(pool: asyncpg.Pool, client: anthropic.Anthropic, ent
     results = await vector_search(embedding, pool, top_k=20)
 
     # rerank is a blocking Claude HTTP call — run in a thread
-    reranked = await asyncio.to_thread(rerank, question, results, 5)
+    reranked = await asyncio.to_thread(rerank, question, results, RERANK_TOP_K)
 
     hit = score_retrieval(expected_foi, reranked)
     retrieved_fois = [r.foi_reference for r in reranked]
@@ -124,17 +125,19 @@ async def main() -> None:
     client = anthropic.Anthropic()
 
     records = []
-    for i, entry in enumerate(questions):
-        print(f"[{i + 1}/{len(questions)}] {entry['question'][:80]}")
-        record = await evaluate_question(pool, client, entry)
-        hit_str = "HIT" if record["retrieval_hit"] else "MISS"
-        print(f"  Retrieval: {hit_str} | Faithfulness: {record['faithfulness_score']}/5")
-        records.append(record)
-
-    await pool.close()
+    try:
+        for i, entry in enumerate(questions):
+            print(f"[{i + 1}/{len(questions)}] {entry.get('question', '?')[:80]}")
+            record = await evaluate_question(pool, client, entry)
+            hit_str = "HIT" if record["retrieval_hit"] else "MISS"
+            print(f"  Retrieval: {hit_str} | Faithfulness: {record['faithfulness_score']}/5")
+            records.append(record)
+    finally:
+        await pool.close()
 
     # Write timestamped results file
-    timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M")
+    timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     output_path = RESULTS_DIR / f"results_{timestamp}.jsonl"
     with output_path.open("w") as f:
         for record in records:
