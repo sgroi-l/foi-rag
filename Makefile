@@ -1,4 +1,4 @@
-.PHONY: dev up down reset logs psql download ingest api
+.PHONY: dev up down reset logs psql download ingest api generate-eval-set eval
 
 # Start db + run API locally with hot reload
 dev:
@@ -32,3 +32,11 @@ download:
 # Ingest PDFs into the database
 ingest:
 	uv run python3 scripts/ingest_all.py
+
+# Generate synthetic evaluation question set (run once)
+generate-eval-set:
+	uv run python3 scripts/generate_eval_set.py
+
+# Run the evaluation harness
+eval:
+	uv run python3 scripts/evaluate.py
