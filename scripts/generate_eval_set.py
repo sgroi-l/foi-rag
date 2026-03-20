@@ -16,7 +16,7 @@ N_SAMPLE = 50
 # Controls random.sample() — which documents to include.
 # Does NOT affect ORDER BY RANDOM() in SQL (which chunk per document).
 RANDOM_SEED = 42
-OUTPUT_PATH = Path("eval/question_set.json")
+OUTPUT_PATH = Path(__file__).parent.parent / "eval" / "question_set.json"
 
 GENERATION_PROMPT = """\
 You are generating evaluation data for a RAG system about Camden Council Freedom of Information requests.
@@ -39,7 +39,7 @@ def generate_qa(client: anthropic.Anthropic, title: str, foi_reference: str, con
     try:
         message = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=256,
+            max_tokens=512,
             messages=[{"role": "user", "content": prompt}],
         )
         data = json.loads(message.content[0].text.strip())
@@ -49,7 +49,7 @@ def generate_qa(client: anthropic.Anthropic, title: str, foi_reference: str, con
             "source_document_title": title,
             "expected_answer": data["expected_answer"],
         }
-    except (json.JSONDecodeError, KeyError) as e:
+    except (json.JSONDecodeError, KeyError, IndexError) as e:
         print(f"  Skipping ({foi_reference}): {e}")
         return None
 
@@ -83,6 +83,11 @@ async def main() -> None:
         entry = generate_qa(client, row["title"] or "", row["foi_reference"] or "", row["content"])
         if entry:
             questions.append(entry)
+
+    if OUTPUT_PATH.exists():
+        print(f"Output file already exists: {OUTPUT_PATH}")
+        print("Delete it first or move it before regenerating.")
+        sys.exit(1)
 
     OUTPUT_PATH.write_text(json.dumps(questions, indent=2, ensure_ascii=False))
     print(f"\nDone. {len(questions)} questions written to {OUTPUT_PATH}")
