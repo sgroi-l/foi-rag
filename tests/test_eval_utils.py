@@ -87,7 +87,31 @@ def test_parse_judge_response_missing_score():
     # Missing "score" key — score defaults to 0 (treated as parse failure by summarise_results)
     score, reason = parse_judge_response('{"reason": "text"}')
     assert score == 0
-    assert reason == "text"
+    assert "invalid score: 0" in reason
+
+
+def test_parse_judge_response_score_out_of_range_high():
+    # Score > 5 is invalid
+    text = '{"reason": "Some reason", "score": 99}'
+    score, reason = parse_judge_response(text)
+    assert score == 0
+    assert reason == "invalid score: 99"
+
+
+def test_parse_judge_response_score_out_of_range_low():
+    # Score < 1 is invalid
+    text = '{"reason": "Some reason", "score": -1}'
+    score, reason = parse_judge_response(text)
+    assert score == 0
+    assert reason == "invalid score: -1"
+
+
+def test_parse_judge_response_score_zero_explicit():
+    # Score of 0 explicitly in JSON is invalid
+    text = '{"reason": "Some reason", "score": 0}'
+    score, reason = parse_judge_response(text)
+    assert score == 0
+    assert reason == "invalid score: 0"
 
 
 # --- summarise_results ---
@@ -129,3 +153,20 @@ def test_summarise_results_empty():
     assert summary["recall"] == 0.0
     assert summary["mean_faithfulness"] == 0.0
     assert summary["judge_errors"] == 0
+
+
+def test_summarise_results_malformed_records():
+    # Missing keys should not raise KeyError; safe defaults should apply
+    records = [
+        {"retrieval_hit": True, "faithfulness_score": 4},
+        {},  # missing both keys
+        {"retrieval_hit": True},  # missing faithfulness_score
+        {"faithfulness_score": 3},  # missing retrieval_hit
+    ]
+    summary = summarise_results(records)
+    assert summary["total"] == 4
+    # 2 hits: first record is True, third record defaults to False, second & fourth default to False
+    assert summary["recall"] == 0.5  # 2 hits / 4 total
+    # scoreable: first (4) and fourth (3), mean = 3.5
+    assert abs(summary["mean_faithfulness"] - 3.5) < 0.001
+    assert summary["judge_errors"] == 2  # records 2 and 3 have score 0
