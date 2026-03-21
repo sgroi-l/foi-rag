@@ -190,6 +190,32 @@ Returns `404 {"detail": "Run not found"}` if no file matches the timestamp.
 
 ---
 
+## Documentation
+
+### User-facing (primary)
+
+A new `docs/dashboard.md` file explaining the dashboard for anyone using the app. Covers:
+
+- How to access it (`/dashboard` when the API is running)
+- What each section shows and what questions it answers:
+  - **Overview** — is the system healthy? what are the current metrics?
+  - **Corpus** — what's been ingested? how are chunks distributed?
+  - **Eval** — how has recall and faithfulness changed across runs? how do two runs compare?
+  - **Pipeline** — what configuration produced the latest results?
+  - **Explorer** — how do I query the system interactively?
+- How to run a new eval and see results in the dashboard (`make eval` → refresh)
+- How to interpret recall@5 and faithfulness scores
+
+The existing `README.md` should get a short "Dashboard" section linking to `docs/dashboard.md`.
+
+### Code-level (secondary)
+
+- Docstrings on all functions in `dashboard_utils.py`
+- Route handler docstrings in `dashboard.py` describing what each page renders and what context variables it passes to the template
+- Inline comments in `eval.html` explaining the run-comparison JS fetch logic
+
+---
+
 ## What Is Not In Scope
 
 - Authentication / access control (public read-only)
