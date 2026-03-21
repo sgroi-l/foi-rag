@@ -15,5 +15,3 @@ __pycache__/
 # IDE
 .vscode/
 
-# Evaluation results
-eval/results_*.jsonl
