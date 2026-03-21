@@ -69,7 +69,9 @@ async def main() -> None:
     pool = await asyncpg.create_pool(os.environ["DATABASE_URL"])
     client = anthropic.Anthropic()
 
-    # Fetch one random chunk per document (ORDER BY RANDOM() is non-deterministic)
+    # Fetch one random non-boilerplate chunk per document.
+    # Boilerplate (internal review notices, sign-off text) is filtered in SQL
+    # so DISTINCT ON only samples from substantive chunks.
     rows = await pool.fetch("""
         SELECT DISTINCT ON (d.id)
             d.foi_reference,
@@ -77,6 +79,10 @@ async def main() -> None:
             c.content
         FROM documents d
         JOIN chunks c ON c.document_id = d.id
+        WHERE
+            lower(c.content) NOT LIKE '%internal review%'
+            AND lower(c.content) NOT LIKE '%information rights officer%'
+            AND lower(c.content) NOT LIKE '%information commissioner%'
         ORDER BY d.id, RANDOM()
     """)
     await pool.close()
