@@ -1,165 +1,189 @@
 [
   {
-    "question": "What is the email address for requesting an Internal Review of a Camden Council FOI response?",
-    "source_foi_reference": "CAM8097",
-    "source_document_title": "Number of PCNs and responses to “Healthy Streets” consultation",
-    "expected_answer": "foireviews@camden.gov.uk"
+    "question": "What is the case reference number for the Camden Council FOI request about individuals with no recourse to public funds?",
+    "source_foi_reference": "CAM235",
+    "source_document_title": "Individuals who have no recourse to public funds.",
+    "expected_answer": "CAM235"
   },
   {
-    "question": "What mowing regimes does Camden Council currently implement on its grass verges to benefit wild flowers?",
-    "source_foi_reference": "CAM676",
-    "source_document_title": "Mowing regime benefit wild flowers",
-    "expected_answer": "Camden Council currently has both relaxed mowing and meadow management across some of its grass verges across the borough. The relaxed mowing regime allows general amenity grass areas to grow long throughout the year to encourage biodiversity, with areas cut once per annum and cuttings collected and removed from site. Camden's meadows are also cut once per annum but are additionally over seeded or plug planted with wildflower."
+    "question": "What was the total number of adults with learning disabilities funded by Camden Council in residential care as of 31st March 2018?",
+    "source_foi_reference": "FOI11407",
+    "source_document_title": "Adults with learning disabilities funded by the Local Authority in residential care",
+    "expected_answer": "72"
   },
   {
-    "question": "How many traveller pupils are entitled to Free School Meals in Camden state-funded schools according to the Spring term 2022 school census?",
-    "source_foi_reference": "CAM3039",
-    "source_document_title": "Traveller children attending schools with the London Borough Of Camden",
-    "expected_answer": "34 traveller pupils are entitled to Free School Meals in Camden state-funded schools (32 in primary schools and 2 in secondary schools)."
+    "question": "How many children were permanently excluded in Camden Council between September 1st 2021 and December 31st 2021?",
+    "source_foi_reference": "CAM2558",
+    "source_document_title": "Number of children permanently excluded since September 1st 2021",
+    "expected_answer": "4 permanent exclusions were upheld by Governing bodies between 1/9/2021 and 31/12/2021."
   },
   {
-    "question": "What is the email address to contact for requesting an Internal Review of an FOI response from Camden Council?",
-    "source_foi_reference": "CAM8873",
-    "source_document_title": "sheltered housing schemes for older people and the provision of Careline",
-    "expected_answer": "foireviews@camden.gov.uk"
+    "question": "Why did Camden Council withdraw the FOI request CAM12105 about Right to Buy homeowners' intention to sell?",
+    "source_foi_reference": "CAM12105",
+    "source_document_title": "how many homeowners (Right to Buy) have told the council of their intention to sell since the rules came into force on August 10 2005",
+    "expected_answer": "The council withdrew the request because it was considered invalid under Section 12 cost limits of the Freedom of Information Act 2000. The request was framed by time (asking for data from August 10, 2005 onwards), which exceeded the cost constraints. The requester was advised to remove the sentence about providing data from as far back as possible and resubmit a new request."
   },
   {
-    "question": "What communications did Planning Committee member Councillor Djemai have with Yoo Capital?",
-    "source_foi_reference": "CAM9932",
-    "source_document_title": "planning committee",
-    "expected_answer": "Councillor Djemai had a meeting with Yoo Capital dated 10 September 2024. There was an initial email of introduction from Yoo Capital dated 08 August 2024, and several emails were exchanged to arrange the meeting dated 19, 22, 23 August and 09 September 2024."
-  },
-  {
-    "question": "Are mother and baby supported living placements in Camden commissioned by adult services or children's services?",
-    "source_foi_reference": "CAM3027",
-    "source_document_title": "mother and baby supported living placements",
-    "expected_answer": "These placements are commissioned by children's services as part of the Young People's Pathway via a block contract for 2 supported accommodation services for young parents."
-  },
-  {
-    "question": "What was Camden Council's response to a Freedom of Information request for contract mobile phone bills claimed under expenses for the previous 24 months?",
-    "source_foi_reference": "CAM1281",
-    "source_document_title": "Mobile phone bills claimed under expenses",
-    "expected_answer": "Camden Council does not hold this information. The council stated they would not request this information from users who may have had excessive bills using mobile phones provided to employees, and indicated that this type of enquiry appears to be targeting corporate organisations and is not applicable to their case."
-  },
-  {
-    "question": "According to FOI CAM627, how many parking bay suspensions have been applied for by Elevation on Hillfield Road since 1st April 2010?",
-    "source_foi_reference": "CAM627",
-    "source_document_title": "Parking suspension",
-    "expected_answer": "No parking suspensions have ever been applied for by Elevation on Hillfield Road."
-  },
-  {
-    "question": "What are the duties of the caretaker regarding distances that the caretaker can move wheelie bins at 50 Fitzjohns Avenue NW3 5LT?",
-    "source_foi_reference": "FOI13279",
-    "source_document_title": "Wheelie bins",
-    "expected_answer": "The Council does not have a set distance that Caretakers are required to move bins, however any distance would need to be reasonable and safe to do so. If there are concerns regarding this, a risk assessment would be carried out to determine any actions moving forward."
-  },
-  {
-    "question": "Which manufacturer does Camden Council use for modular ramps?",
-    "source_foi_reference": "CAM7445",
-    "source_document_title": "Supply and installation of modular/concrete ramps and contract framework",
-    "expected_answer": "PARS"
-  },
-  {
-    "question": "How many times has Camden Council offered households accommodation in either Stoke-on-Trent or Staffordshire in the last three years?",
-    "source_foi_reference": "FOI11965",
-    "source_document_title": "offering accommodation in either Stoke-on-Trent or Staffordshire",
-    "expected_answer": "Camden Council has not offered any households accommodation in either Stoke-on-Trent or Staffordshire."
-  },
-  {
-    "question": "What is the email address to request an Internal Review of a Camden Council FOI response?",
-    "source_foi_reference": "FOI11552",
-    "source_document_title": "Old town hall refurbishment and the new offices at 5 Pancras Square",
-    "expected_answer": "foireviews@camden.gov.uk"
-  },
-  {
-    "question": "How many children in Camden had contact with the child and social services department in 2017 where the child was at risk of female genital mutilation?",
-    "source_foi_reference": "FOI10929",
-    "source_document_title": "Children who have had contact with Social Services in 2017",
-    "expected_answer": "20 children"
-  },
-  {
-    "question": "How many unauthorised encampments did Camden Council have in the last five years?",
-    "source_foi_reference": "FOI11767",
-    "source_document_title": "Unauthorised encampments",
-    "expected_answer": "Camden Council has not had any unauthorised encampments in the last five years."
-  },
-  {
-    "question": "What is the time limit for requesting an Internal Review of a Camden Council FOI response?",
-    "source_foi_reference": "CAM1807",
-    "source_document_title": "Registered pubs",
-    "expected_answer": "Within 2 months of the letter"
-  },
-  {
-    "question": "How many formal challenges did Camden Council receive regarding its grant processes and decisions based on alleged non-compliance with State Aid, Subsidy Control, or Public Procurement regulations in the years 2018/19, 2019/20, and 2020/21?",
-    "source_foi_reference": "CAM3577",
-    "source_document_title": "the annual number and value of grants given to voluntary, community & social enterprise sector",
-    "expected_answer": "No formal challenges were received about grants processes and decisions on alleged non-compliance with State Aid, Subsidy Control, or Public Procurement regulations."
-  },
-  {
-    "question": "How many Camden residents accessed residential drug and alcohol treatment funded by the local authority in 2020/21?",
-    "source_foi_reference": "CAM2849",
-    "source_document_title": "Alcohol rehabilitation placements",
-    "expected_answer": "20 Camden residents accessed residential treatment funded by the LA in 2020/21. This was lower than 2019/20 due to the impact of COVID on residential providers' ability to accept admissions."
-  },
-  {
-    "question": "What is the case reference number for the FOI request about commercial properties sold by Camden Council?",
-    "source_foi_reference": "CAM10941",
-    "source_document_title": "commercial properties sold",
-    "expected_answer": "CAM10941"
-  },
-  {
-    "question": "Who is the Information & Records Management Officer for Camden Council's FOI requests?",
-    "source_foi_reference": "FOI12140",
-    "source_document_title": "independent Accommodation",
-    "expected_answer": "Tanya Bryant is the Information & Records Management Officer. She can be contacted at foi@camden.gov.uk or by phone at 020 7974 2850."
-  },
-  {
-    "question": "What is the deadline for requesting an Internal Review of a Camden Council FOI response?",
-    "source_foi_reference": "CAM10081",
-    "source_document_title": "healthcare funding",
-    "expected_answer": "Within 2 months of the response letter."
-  },
-  {
-    "question": "What is the email address to contact for requesting an Internal Review of an FOI response from Camden Council?",
-    "source_foi_reference": "CAM1600",
-    "source_document_title": "PAT testing (electrical equipment testing)",
-    "expected_answer": "foireviews@camden.gov.uk"
-  },
-  {
-    "question": "What is the new case reference number for the FOI request about resettled refugee children that was originally logged as CAM550?",
-    "source_foi_reference": "CAM550",
-    "source_document_title": "Resettled refugee children",
-    "expected_answer": "CAM564"
-  },
-  {
-    "question": "Did Camden Council proceed with incorporating the Pivigo service into live operational use after the pilot/testing phase?",
+    "question": "Did Camden Council proceed beyond the pilot/testing phase with Pivigo for dealing with rent arrears?",
     "source_foi_reference": "CAM6704",
     "source_document_title": "pivigo dealing with rent arrears, algorithms for ‘model drift’ and rent-prediction or rent-gathering",
-    "expected_answer": "No, the engagement with Pivigo did not proceed beyond the pilot/testing phase and the service was never incorporated into live operational use."
+    "expected_answer": "No, the engagement with Pivigo did not proceed beyond the pilot/testing phase. The service was never incorporated into live operational use."
   },
   {
-    "question": "As of 16 July 2024, how many public toilets does Camden Council currently maintain in total?",
-    "source_foi_reference": "CAM8118",
-    "source_document_title": "various questions regarding Camden's public toilets",
-    "expected_answer": "35 public toilets in total, comprising 7 public toilet conveniences, 22 toilets within council buildings, and 6 pop-up toilets."
+    "question": "Does Camden Council systematically keep information on S106 agreements with clawback obligations?",
+    "source_foi_reference": "CAM210",
+    "source_document_title": "S106 agreements with a clawback obligation",
+    "expected_answer": "No. The London Borough of Camden does not agree to clawback obligations being imposed on the clauses of its Section 106 agreements as a matter of course, and therefore does not systematically keep any information on this form of obligation."
   },
   {
-    "question": "Who is the new supplier for Camden Council's Community Equipment Service from 1st April 2023?",
+    "question": "Why did Camden Council withhold addresses of premises where landlord's consent was granted for leaseholder property extensions on Hillgrove estate?",
+    "source_foi_reference": "FOI10294",
+    "source_document_title": "Hillgrove estate",
+    "expected_answer": "Under exemption S40(2), addresses were not provided because this might possibly identify individuals and infringe their rights under the Data Protection Act. This is an absolute exemption."
+  },
+  {
+    "question": "Which ward does Councillor Luisa Porritt represent?",
+    "source_foi_reference": "FOI14134",
+    "source_document_title": "Where our councillors and employees live",
+    "expected_answer": "Belsize Ward"
+  },
+  {
+    "question": "What was the purpose of the Safer and Stronger Communities Fund Neighbourhood Element (SSCF NE)?",
+    "source_foi_reference": "CAM6510",
+    "source_document_title": "Safer & Stronger Communities Funding allocations to LSP between 2006-2010",
+    "expected_answer": "The SSCF NE was designed to support Local Strategic Partnerships in promoting community safety, liveability and community engagement in the most disadvantaged neighbourhoods through initiatives such as neighbourhood management arrangements. It targeted the 3% most deprived Lower Layer Super Output Areas (LSOAs) as measured by the Index of Multiple Deprivation (IMD)."
+  },
+  {
+    "question": "Who is the Information and Records Management Officer for Camden Council's FOI handling, and what is their telephone number?",
+    "source_foi_reference": "FOI13232",
+    "source_document_title": "Allegations of misconduct",
+    "expected_answer": "Peter Williams is the Information and Records Management Officer. His telephone number is 020 7974 7857."
+  },
+  {
+    "question": "What is Camden Council's current Intranet solution and when was it implemented?",
+    "source_foi_reference": "FOI11563",
+    "source_document_title": "Council’s intranet.",
+    "expected_answer": "The current Intranet solution is Office365 and it has been in use since April 2018."
+  },
+  {
+    "question": "How many electrical equipment units does Camden Council test through PAT testing?",
+    "source_foi_reference": "CAM1600",
+    "source_document_title": "PAT testing (electrical equipment testing)",
+    "expected_answer": "Approximately 5000 units."
+  },
+  {
+    "question": "How many allotment plots are located at Fitzroy Park according to Camden Council's FOI response from August 2018?",
+    "source_foi_reference": "FOI11550",
+    "source_document_title": "Allotment sites",
+    "expected_answer": "97 plots"
+  },
+  {
+    "question": "How much unspent Section 106 funding allocated for healthcare does Camden Council currently hold?",
+    "source_foi_reference": "CAM10081",
+    "source_document_title": "healthcare funding",
+    "expected_answer": "£2.3 Million"
+  },
+  {
+    "question": "Which contractors has LB Camden used to install stairlifts from 1st January 2019 to present day?",
+    "source_foi_reference": "CAM5551",
+    "source_document_title": "installation of stairlifts in to properties where LB Camden is the landlord",
+    "expected_answer": "Stannah and Taylor Dolman"
+  },
+  {
+    "question": "What mowing regimes has Camden Council implemented to benefit wild flowers on its road verges?",
+    "source_foi_reference": "CAM676",
+    "source_document_title": "Mowing regime benefit wild flowers",
+    "expected_answer": "Camden Council has implemented both relaxed mowing and meadow management across some grass verges in the borough. The relaxed mowing regime allows general amenity grass areas to grow long throughout the year to encourage biodiversity, with cutting once per annum and cuttings collected and removed. The meadow areas are also cut once per annum but are over seeded or plug planted with wildflower."
+  },
+  {
+    "question": "How many times was London Borough of Camden's Severe Weather Emergency Protocol (SWEP) activated between 31 May 2025 and 1 September 2025, inclusive?",
+    "source_foi_reference": "CAM12026",
+    "source_document_title": "hot weather SWEP activations in 2025",
+    "expected_answer": "10 times"
+  },
+  {
+    "question": "How many summons were issued in the Magistrates Court for non-payment of non-domestic business rates in Camden during the financial year 2019/20?",
+    "source_foi_reference": "CAM40",
+    "source_document_title": "Non-payment of non-domestic business) rates.",
+    "expected_answer": "1816 summons were issued in the Magistrates Court for non-payment either in whole or in part of non-domestic business rates."
+  },
+  {
+    "question": "What is the case reference number for the FOI request about mother and baby supported living placements dated 08/04/2022?",
+    "source_foi_reference": "CAM3027",
+    "source_document_title": "mother and baby supported living placements",
+    "expected_answer": "CAM3027"
+  },
+  {
+    "question": "Who is the new supplier that will deliver the Community Equipment Service for Camden Council from April 1st, 2023?",
     "source_foi_reference": "CAM4718",
     "source_document_title": "community equipment",
     "expected_answer": "NRS Healthcare will be the new supplier delivering the Community Equipment Service from Saturday 1st April 2023."
   },
   {
-    "question": "Where can you search for planning records in Camden?",
-    "source_foi_reference": "CAM10915",
-    "source_document_title": "planning permission expiry dates",
-    "expected_answer": "Planning records can be searched at https://accountforms.camden.gov.uk/planning-search/ or https://planningrecords.camden.gov.uk/NECSWS/PlanningExplorer/GeneralSearch.aspx"
+    "question": "How many Civil Penalties relating to housing offences were served to private landlords in Camden in 2019/2020?",
+    "source_foi_reference": "CAM1788",
+    "source_document_title": "Enforcement in the private rented sector",
+    "expected_answer": "122 Civil Penalties were served to private landlords in 2019/2020."
   },
   {
-    "question": "What is the process for requesting an internal review if you are unhappy with how your FOI response was handled by Camden Council?",
-    "source_foi_reference": "CAM12105",
-    "source_document_title": "how many homeowners (Right to Buy) have told the council of their intention to sell since the rules came into force on August 10 2005",
-    "expected_answer": "You can request an Internal Review within 2 months of the response letter by email to foireviews@camden.gov.uk or by post to: Information and Records Management Team, London Borough of Camden, Town Hall, Judd Street, London WC1H 9JE. You should quote your case reference number."
+    "question": "How many unaccompanied asylum-seeking children in Camden's care went missing during the first quarter of 2023/24?",
+    "source_foi_reference": "CAM7840",
+    "source_document_title": "Unaccompanied Asylum-Seeking Children in your care",
+    "expected_answer": "13"
+  },
+  {
+    "question": "Which ITSM service tool does Camden Council currently use for managing their IT service desk?",
+    "source_foi_reference": "CAM4337",
+    "source_document_title": "management of IT service desk, ITSM service tool, review, and responsible person",
+    "expected_answer": "Atlassian JIRA Service Management"
+  },
+  {
+    "question": "What was the sale price of 16 Chenies Street when it was sold by Camden Council?",
+    "source_foi_reference": "CAM10941",
+    "source_document_title": "commercial properties sold",
+    "expected_answer": "£3,430,000"
+  },
+  {
+    "question": "What information did the requester ask for in FOI request CAM11626?",
+    "source_foi_reference": "CAM11626",
+    "source_document_title": "properties exempt from Council Tax",
+    "expected_answer": "The requester asked for the number of properties in each full postcode where either Class E (property left empty where the liable person is in hospital) or Class F (property left empty following the death of the liable person) Council Tax exemptions are applied."
+  },
+  {
+    "question": "How many council-run allotments does Camden Council operate and what is the average waiting time at each location?",
+    "source_foi_reference": "CAM9805",
+    "source_document_title": "information regarding council-run allotments",
+    "expected_answer": "Camden Council operates 4 council-run allotments: Antrim Grove with 55 people waiting (19 years average wait), Branch Hill with 151 people waiting (21 years average wait), Fitzroy Park with 126 people waiting (21 years average wait), and Westcroft Estate with 24 people waiting (4 years average wait)."
+  },
+  {
+    "question": "How many Camden residents accessed residential drug and alcohol treatment funded by the local authority in 2020/21?",
+    "source_foi_reference": "CAM2849",
+    "source_document_title": "Alcohol rehabilitation placements",
+    "expected_answer": "20 Camden residents accessed residential treatment funded by the LA in 2020/21. This was lower than 2019/20 due to the impact of COVID on residential provider's ability to accept admissions."
+  },
+  {
+    "question": "Does Camden Council charge residents for the emergency alarm service in sheltered housing schemes?",
+    "source_foi_reference": "CAM8873",
+    "source_document_title": "sheltered housing schemes for older people and the provision of Careline",
+    "expected_answer": "No. The council does not charge for this service which is under review."
+  },
+  {
+    "question": "How many Freedom of Information requests did Camden Council receive between 1 January 2023 and 31 December 2023?",
+    "source_foi_reference": "CAM7558",
+    "source_document_title": "various statistics regarding FOI performance",
+    "expected_answer": "1542 Freedom of Information requests. The council also dealt with 1175 requests less formally and more quickly as business as usual (BAU) responses."
+  },
+  {
+    "question": "What are the planning reference numbers and their three-year expiry dates for planning permissions that have passed their expiry date and have not been built according to FOI CAM10915?",
+    "source_foi_reference": "CAM10915",
+    "source_document_title": "planning permission expiry dates",
+    "expected_answer": "The three planning permissions are: 2019/6354/P (expiry date 11/08/2024), 2020/2470/P (expiry date 30/10/2023), and 2019/0910/P (expiry date 12/03/2023)."
+  },
+  {
+    "question": "Who is the Information and Records Management Officer listed in the response to FOI10588 about money spent hiring celebrities?",
+    "source_foi_reference": "FOI10588",
+    "source_document_title": "Money spent hiring celebrities",
+    "expected_answer": "Peter Williams"
   },
   {
     "question": "How many complaints did Camden Council receive about the conditions of private rented accommodation being used to house asylum seekers for the years 2019/20, 2020/21, 2021/22, 2022/23 and 2023/24?",
@@ -168,135 +192,111 @@
     "expected_answer": "Camden Council did not receive any complaints concerning asylum seeker accommodation for the years requested."
   },
   {
-    "question": "Had Camden Virtual School raised any requests for tuition with NTP Tutoring Partners through the NTP Tuition Hub as of December 2021?",
-    "source_foi_reference": "CAM2556",
-    "source_document_title": "National Tutoring Programme",
-    "expected_answer": "No, Camden Virtual School had not ever raised a request for tuition with NTP Tutoring Partners through the NTP Tuition Hub, however they anticipated making referrals that term and also encouraging schools to do so."
-  },
-  {
-    "question": "How many households were waiting to be housed by the London Borough of Camden as of 31 January 2023?",
+    "question": "Did Camden Council hold information about the number of temporary accommodation properties, average length of stay and cost per night in response to FOI request CAM6854?",
     "source_foi_reference": "CAM6854",
     "source_document_title": "the number of temporary accommodation properties, average length of stay and cost per night",
-    "expected_answer": "7,035 households were waiting to be housed by the London Borough of Camden on 31 January 2023."
+    "expected_answer": "Yes, the council held the information requested, but withheld all of it as it was exempt under the Freedom of Information Act 2000."
   },
   {
-    "question": "Why was Camden Council unable to provide information about agency spend for schools in response to FOI request CAM8321?",
-    "source_foi_reference": "CAM8321",
-    "source_document_title": "spend on temp agencies for schools",
-    "expected_answer": "Camden Council does not hold this information because individual schools manage their own agency recruitment, and no information is held centrally by the council. Requesters need to contact individual Secondary/SEND schools directly for this information."
+    "question": "What was Camden Council's response to the FOI request for contract mobile phone bills claimed under expenses for the previous 24 months?",
+    "source_foi_reference": "CAM1281",
+    "source_document_title": "Mobile phone bills claimed under expenses",
+    "expected_answer": "Camden Council does not hold the information requested. The council stated they would not request this information from users who may have had excessive bills using mobile phones provided to employees, and indicated this enquiry appears to be targeting corporate organisations and not applicable in their case."
   },
   {
-    "question": "Why did Camden Council refuse to provide information about the percentage of council tax paid via Direct Debit in 2020-21, 2019-20, and 2018-19?",
+    "question": "What was the total annual financial value of grants given to the voluntary, community and social enterprise sector by Camden Council in 2019/20?",
+    "source_foi_reference": "CAM3577",
+    "source_document_title": "the annual number and value of grants given to voluntary, community & social enterprise sector",
+    "expected_answer": "£5,181,630 via 125 individual grants"
+  },
+  {
+    "question": "Does Camden Council hold a copy of its most recent Microsoft Licensing Statement?",
+    "source_foi_reference": "CAM5749",
+    "source_document_title": "the most recent Microsoft Licensing Statement, how the council’s software licensing has been",
+    "expected_answer": "No, Camden Council does not hold this information because it has never requested a Licensing Statement from Microsoft."
+  },
+  {
+    "question": "Has Elevations applied for any parking bay suspensions in respect of numbers 2 and 3 Hillfield Road since 1st April 2010?",
+    "source_foi_reference": "CAM627",
+    "source_document_title": "Parking suspension",
+    "expected_answer": "No, no parking suspensions have ever been applied for by Elevation on Hillfield Road."
+  },
+  {
+    "question": "Who is the Information & Records Management Officer for Camden Council's FOI requests?",
+    "source_foi_reference": "FOI12140",
+    "source_document_title": "independent Accommodation",
+    "expected_answer": "Tanya Bryant"
+  },
+  {
+    "question": "How many accidents and incidents have been reported involving the raised cycling lane outside the Royal Langford apartments on Greville Road since 2020?",
+    "source_foi_reference": "CAM10712",
+    "source_document_title": "number of accidents and incidents reported involving the raised cycling lane that is situated outside of the royal langford apartments",
+    "expected_answer": "Two reported collisions involving pedal cyclists: one on 16 February 2022 at the junction of Kilburn High Road and Greville Road (involving a pedal cycle and van/goods vehicle), and one on 10 May 2024 on Greville Road near Kilburn High Road (involving a pedal cycle and taxi/private hire vehicle). Both collisions occurred before the protected cycle lane was completed earlier in 2025, though a wand-protected cycle lane had been in place since 2021."
+  },
+  {
+    "question": "What communications and meetings did Planning Committee members have with Yoo Capital, and when did they occur?",
+    "source_foi_reference": "CAM9932",
+    "source_document_title": "planning committee",
+    "expected_answer": "Councillor Vincent had an email exchange with Yoo Capital about the Saville Theatre, Shaftesbury Avenue on 14, 18, 19 & 27 June 2023, and received an email invitation to a consultation for 135 Shaftesbury Avenue on 13 September 2023. Councillor Djemai had a meeting with Yoo Capital on 10 September 2024, preceded by an initial email of introduction dated 08 August 2024 and several emails exchanged on 19, 22, 23 August and 09 September 2024."
+  },
+  {
+    "question": "Which manufacturer does Camden Council use for modular ramps?",
+    "source_foi_reference": "CAM7445",
+    "source_document_title": "Supply and installation of modular/concrete ramps and contract framework",
+    "expected_answer": "PARS"
+  },
+  {
+    "question": "What was the total cost of 5 Pancras Square including fixtures, fittings and move costs?",
+    "source_foi_reference": "FOI11552",
+    "source_document_title": "Old town hall refurbishment and the new offices at 5 Pancras Square",
+    "expected_answer": "The total cost of 5 Pancras Square was £121.6m including fixtures and fittings and move costs."
+  },
+  {
+    "question": "How many small cells have been deployed in Camden as part of the communications infrastructure concession?",
+    "source_foi_reference": "FOI13268",
+    "source_document_title": "5G",
+    "expected_answer": "74 small cells have been deployed."
+  },
+  {
+    "question": "What is housing stock transfer and when was it introduced by the government?",
+    "source_foi_reference": "CAM2324",
+    "source_document_title": "Housing Stock Transfer",
+    "expected_answer": "Housing stock transfer is the voluntary transfer of ownership of all or some of a local authority's tenanted and leasehold homes to either a housing association specifically created for that purpose or an already existing housing association. It was introduced by government in 1988."
+  },
+  {
+    "question": "Which council department carried out due diligence checks on Aurety Limited and when?",
+    "source_foi_reference": "FOI13528",
+    "source_document_title": "Aurety Limited",
+    "expected_answer": "The Prevent service carried out the due diligence checks on Aurety Limited in September 2019."
+  },
+  {
+    "question": "What reference number was assigned to the FOI request about the number of PCNs and responses to the 'Healthy Streets' consultation?",
+    "source_foi_reference": "CAM8097",
+    "source_document_title": "Number of PCNs and responses to “Healthy Streets” consultation",
+    "expected_answer": "CAM8097"
+  },
+  {
+    "question": "How many legal traveller sites does Camden Council own and manage, and where are they located?",
+    "source_foi_reference": "FOI11767",
+    "source_document_title": "Unauthorised encampments",
+    "expected_answer": "Camden Council owns and manages two legal traveller sites: Castlehaven Road and Camden Street (corner of Carol Street) NW1."
+  },
+  {
+    "question": "Why was Camden Council unable to provide a breakdown of agency staff expenditure by department or service area?",
+    "source_foi_reference": "CAM9810",
+    "source_document_title": "agency staff",
+    "expected_answer": "Because the Council has undergone various organisational changes during the requested period, and the departmental and service area changes make any breakdown essentially meaningless and prevent like-for-like comparisons between Financial Years."
+  },
+  {
+    "question": "Why did Camden Council refuse to provide the percentage of council tax paid via Direct Debit for 2020-21, 2019-20, and 2018-19?",
     "source_foi_reference": "CAM2685",
     "source_document_title": "Percentage of council tax paid via Direct Debit in 2020-21, 2019-20 & 2018-19",
     "expected_answer": "Camden Council refused the request under section 12 of the Freedom of Information Act 2000 because processing the request would require a disproportionate amount of time, effort, and expense, exceeding the appropriate cost limit."
   },
   {
-    "question": "How many Freedom of Information Requests did Camden Council receive between 01.01.2023 and 31.12.2023?",
-    "source_foi_reference": "CAM7558",
-    "source_document_title": "various statistics regarding FOI performance",
-    "expected_answer": "1542 Freedom of Information Requests. Additionally, the council dealt with 1175 requests less formally and more quickly as business as usual (BAU) responses."
-  },
-  {
-    "question": "What is the email address to contact for requesting an Internal Review of a Camden Council FOI response?",
-    "source_foi_reference": "CAM40",
-    "source_document_title": "Non-payment of non-domestic business) rates.",
-    "expected_answer": "foireviews@camden.gov.uk"
-  },
-  {
-    "question": "Does the London Borough of Camden systematically keep information on S106 agreements with clawback obligations?",
-    "source_foi_reference": "CAM210",
-    "source_document_title": "S106 agreements with a clawback obligation",
-    "expected_answer": "No. The London Borough of Camden does not agree to clawback obligations being imposed on the clauses of its Section 106 agreements as a matter of course, and therefore does not systematically keep any information on this form of obligation."
-  },
-  {
-    "question": "What was the purpose of the Safer and Stronger Communities Fund Neighbourhood Element (SSCF NE)?",
-    "source_foi_reference": "CAM6510",
-    "source_document_title": "Safer & Stronger Communities Funding allocations to LSP between 2006-2010",
-    "expected_answer": "The SSCF NE was designed to support Local Strategic Partnerships in promoting community safety, liveability and community engagement in the most disadvantaged neighbourhoods (the 3% most deprived Lower Layer Super Output Areas as measured by the Index of Multiple Deprivation), through initiatives such as neighbourhood management arrangements."
-  },
-  {
-    "question": "Why does Camden Council not hold information about hate crimes reported to the Community Safety Unit?",
-    "source_foi_reference": "CAM1499",
-    "source_document_title": "Hate Crimes reported to Community Safety Unit",
-    "expected_answer": "Camden Council does not hold this information because reports submitted via their website link go directly to the Community Safety Unit at the Metropolitan Police, not to Camden Council. Therefore, the Council does not receive any of the reports from this webpage."
-  },
-  {
-    "question": "Who is the Information and Records Management Officer mentioned in FOI13232?",
-    "source_foi_reference": "FOI13232",
-    "source_document_title": "Allegations of misconduct",
-    "expected_answer": "Peter Williams"
-  },
-  {
-    "question": "How many days in the past 12 months have there been road works in Highgate High Street controlled by traffic signals?",
-    "source_foi_reference": "CAM8970",
-    "source_document_title": "road works in Highgate High Street",
-    "expected_answer": "3 days"
-  },
-  {
-    "question": "What is the email address to request an Internal Review if you are unhappy with how your FOI response was handled?",
-    "source_foi_reference": "CAM3327",
-    "source_document_title": "our telephony system and mobile phones, users, details of contract and procurement",
-    "expected_answer": "foireviews@camden.gov.uk"
-  },
-  {
-    "question": "What was Camden Council's total expenditure on residential care for adults with learning disabilities in 2017-18?",
-    "source_foi_reference": "FOI11407",
-    "source_document_title": "Adults with learning disabilities funded by the Local Authority in residential care",
-    "expected_answer": "£5,830,000"
-  },
-  {
-    "question": "What types of specialist support services does Camden Council's Adults Commissioning Team commission?",
-    "source_foi_reference": "FOI12426",
-    "source_document_title": "Private domiciliary care",
-    "expected_answer": "The Adults Commissioning Team commissions a range of support services including: Residential Care, Nursing Care, Advocacy, Homeless Support, Home based care and support, Equipment, Supported Living, Temporary Accommodation and Hostels, Advice & Information Services, Adult & Further Education Services, Alcohol & Drug Rehabilitation, Community Day Services and support, Sexual Health, and Extra Care/Sheltered Accommodation."
-  },
-  {
-    "question": "According to the homelessness presentations, assessments and eligibility FOI response, how many cases were recorded as 'Illegal/unauthorised occupant'?",
-    "source_foi_reference": "FOI11091",
-    "source_document_title": "Homelessness presentations, assessments and eligibility",
-    "expected_answer": "1"
-  },
-  {
-    "question": "What is the email address to request an Internal Review of a Camden Council FOI response?",
-    "source_foi_reference": "CAM7812",
-    "source_document_title": "children's homes sold off every year for the last five years",
-    "expected_answer": "foireviews@camden.gov.uk"
-  },
-  {
-    "question": "What is the email address for submitting complaints to the Information Commissioner's Office?",
-    "source_foi_reference": "CAM7230",
-    "source_document_title": "Central Heating failure on the Curnock Street Estate",
-    "expected_answer": "casework@ico.org.uk"
-  },
-  {
-    "question": "Who is the Information Rights Officer listed in this Camden Council FOI response document?",
-    "source_foi_reference": "CAM4446",
-    "source_document_title": "New Policy for Changing the locks to entrances to Communal Areas of Street Properties",
-    "expected_answer": "Philip Lewis is the Information Rights Officer."
-  },
-  {
-    "question": "What is the telephone number for the Information Commissioner's Office?",
-    "source_foi_reference": "CAM2114",
-    "source_document_title": "Temporary Events Notice (TEN)",
-    "expected_answer": "0303 123 1113"
-  },
-  {
-    "question": "How much money did Camden Council spend hiring celebrities to make appearances from May 6, 2014 onwards?",
-    "source_foi_reference": "FOI10588",
-    "source_document_title": "Money spent hiring celebrities",
-    "expected_answer": "The Council has not spent any money hiring celebrities to make an appearance."
-  },
-  {
-    "question": "How many allotment plots are there at Fitzroy Park as of June 2018?",
-    "source_foi_reference": "FOI11550",
-    "source_document_title": "Allotment sites",
-    "expected_answer": "97 plots"
-  },
-  {
-    "question": "Who is the Information Rights Officer mentioned in the Covid Test sent to Immensa Lab FOI response (CAM2533)?",
-    "source_foi_reference": "CAM2533",
-    "source_document_title": "Covid Test sent to Immensa Lab",
-    "expected_answer": "Tanya Bryant is the Information Rights Officer."
+    "question": "Were all fly-tipping incidents cleared up in full according to Camden Council's FOI response CAM9595?",
+    "source_foi_reference": "CAM9595",
+    "source_document_title": "details of Significant / Multi Loads fly-tipping incidents recorded by the authority over the most recent 12 months on record, as well as the previous 12 months on record (separately)",
+    "expected_answer": "Yes, all fly-tips were cleared."
   }
 ]
