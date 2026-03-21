@@ -42,7 +42,10 @@ def generate_qa(client: anthropic.Anthropic, title: str, foi_reference: str, con
             max_tokens=512,
             messages=[{"role": "user", "content": prompt}],
         )
-        data = json.loads(message.content[0].text.strip())
+        text = next(b.text for b in message.content if b.type == "text").strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        data = json.loads(text)
         return {
             "question": data["question"],
             "source_foi_reference": foi_reference,
@@ -55,6 +58,11 @@ def generate_qa(client: anthropic.Anthropic, title: str, foi_reference: str, con
 
 
 async def main() -> None:
+    if OUTPUT_PATH.exists():
+        print(f"Output file already exists: {OUTPUT_PATH}")
+        print("Delete it first or move it before regenerating.")
+        sys.exit(1)
+
     random.seed(RANDOM_SEED)
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -83,11 +91,6 @@ async def main() -> None:
         entry = generate_qa(client, row["title"] or "", row["foi_reference"] or "", row["content"])
         if entry:
             questions.append(entry)
-
-    if OUTPUT_PATH.exists():
-        print(f"Output file already exists: {OUTPUT_PATH}")
-        print("Delete it first or move it before regenerating.")
-        sys.exit(1)
 
     OUTPUT_PATH.write_text(json.dumps(questions, indent=2, ensure_ascii=False))
     print(f"\nDone. {len(questions)} questions written to {OUTPUT_PATH}")
