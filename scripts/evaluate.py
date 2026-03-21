@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -60,7 +61,10 @@ def _judge_faithfulness_sync(client: anthropic.Anthropic, question: str, chunks_
             max_tokens=512,
             messages=[{"role": "user", "content": prompt}],
         )
-        return parse_judge_response(message.content[0].text.strip())
+        text = next(b.text for b in message.content if b.type == "text").strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        return parse_judge_response(text)
     except Exception as e:
         return 0, f"judge error: {e}"
 
@@ -139,7 +143,27 @@ async def main() -> None:
     timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     output_path = RESULTS_DIR / f"results_{timestamp}.jsonl"
+
+    try:
+        git_sha = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], text=True
+        ).strip()
+    except subprocess.CalledProcessError:
+        git_sha = "unknown"
+
+    metadata = {
+        "_type": "metadata",
+        "timestamp": timestamp,
+        "git_sha": git_sha,
+        "question_set": str(QUESTION_SET_PATH),
+        "rerank_top_k": RERANK_TOP_K,
+        "models": {
+            "judge": "claude-haiku-4-5-20251001",
+        },
+    }
+
     with output_path.open("w") as f:
+        f.write(json.dumps(metadata, ensure_ascii=False) + "\n")
         for record in records:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
