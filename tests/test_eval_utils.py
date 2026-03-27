@@ -1,8 +1,9 @@
 from scripts.eval_utils import (
-    score_retrieval,
+    retrieval_metrics,
     format_chunks_for_prompt,
     parse_judge_response,
     summarise_results,
+    RetrievalMetrics,
 )
 from src.retrieval.search import SearchResult
 from datetime import date
@@ -23,20 +24,54 @@ def make_result(foi_reference: str, title: str = "Title", content: str = "Conten
     )
 
 
-# --- score_retrieval ---
+# --- retrieval_metrics ---
 
-def test_score_retrieval_hit():
-    results = [make_result("CAM001"), make_result("CAM002")]
-    assert score_retrieval("CAM001", results) is True
+def test_retrieval_metrics_hit_single_result():
+    results = [make_result("CAM001")]
+    m = retrieval_metrics("CAM001", results)
+    assert m.hit is True
+    assert m.rank == 1
+    assert abs(m.precision - 1.0) < 0.001
 
 
-def test_score_retrieval_miss():
+def test_retrieval_metrics_hit_multiple_results():
+    results = [make_result("CAM002"), make_result("CAM001"), make_result("CAM003")]
+    m = retrieval_metrics("CAM001", results)
+    assert m.hit is True
+    assert m.rank == 2
+    assert abs(m.precision - 1 / 3) < 0.001
+
+
+def test_retrieval_metrics_miss():
     results = [make_result("CAM002"), make_result("CAM003")]
-    assert score_retrieval("CAM001", results) is False
+    m = retrieval_metrics("CAM001", results)
+    assert m.hit is False
+    assert m.rank is None
+    assert m.precision == 0.0
 
 
-def test_score_retrieval_empty_results():
-    assert score_retrieval("CAM001", []) is False
+def test_retrieval_metrics_empty_results():
+    m = retrieval_metrics("CAM001", [])
+    assert m.hit is False
+    assert m.rank is None
+    assert m.precision == 0.0
+
+
+def test_retrieval_metrics_deduplicates_chunks():
+    # Two chunks from same FOI — should count as 1 unique document
+    results = [make_result("CAM001"), make_result("CAM001"), make_result("CAM002")]
+    m = retrieval_metrics("CAM001", results)
+    assert m.hit is True
+    assert m.rank == 1
+    # 2 unique FOIs: CAM001, CAM002 → precision = 1/2
+    assert abs(m.precision - 0.5) < 0.001
+
+
+def test_retrieval_metrics_preserves_order_after_dedup():
+    # CAM002 appears first (two chunks), CAM001 second → rank of CAM001 is 2
+    results = [make_result("CAM002"), make_result("CAM002"), make_result("CAM001")]
+    m = retrieval_metrics("CAM001", results)
+    assert m.rank == 2
 
 
 # --- format_chunks_for_prompt ---

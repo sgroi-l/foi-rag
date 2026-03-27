@@ -18,7 +18,7 @@ from src.retrieval.search import vector_search
 from src.retrieval.reranker import rerank
 from src.retrieval.generator import generate_answer
 from scripts.eval_utils import (
-    score_retrieval,
+    retrieval_metrics,
     format_chunks_for_prompt,
     parse_judge_response,
     summarise_results,
@@ -82,7 +82,7 @@ async def evaluate_question(pool: asyncpg.Pool, client: anthropic.Anthropic, ent
     # rerank is a blocking Claude HTTP call — run in a thread
     reranked = await asyncio.to_thread(rerank, question, results, RERANK_TOP_K)
 
-    hit = score_retrieval(expected_foi, reranked)
+    hit = retrieval_metrics(expected_foi, reranked).hit
     retrieved_fois = [r.foi_reference for r in reranked]
 
     if reranked:

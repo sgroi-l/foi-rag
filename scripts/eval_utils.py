@@ -1,10 +1,34 @@
 import json
+from dataclasses import dataclass
 from src.retrieval.search import SearchResult
 
 
-def score_retrieval(expected_foi: str, retrieved_results: list[SearchResult]) -> bool:
-    """Return True if the expected FOI reference appears in the retrieved results."""
-    return any(r.foi_reference == expected_foi for r in retrieved_results)
+@dataclass
+class RetrievalMetrics:
+    hit: bool
+    precision: float   # 1/n_unique_returned if hit, else 0.0; 0.0 if nothing returned
+    rank: int | None   # 1-based rank of expected FOI among unique FOIs; None if not found
+
+
+def retrieval_metrics(expected_foi: str, retrieved_results: list[SearchResult]) -> RetrievalMetrics:
+    """Compute document-level retrieval metrics for a single question.
+
+    Deduplicates on foi_reference (preserving order) before computing metrics.
+    Precision denominator is the actual number of unique documents returned.
+    """
+    seen: list[str] = []
+    for r in retrieved_results:
+        if r.foi_reference not in seen:
+            seen.append(r.foi_reference)
+
+    if not seen:
+        return RetrievalMetrics(hit=False, precision=0.0, rank=None)
+
+    try:
+        rank = seen.index(expected_foi) + 1
+        return RetrievalMetrics(hit=True, precision=1 / len(seen), rank=rank)
+    except ValueError:
+        return RetrievalMetrics(hit=False, precision=0.0, rank=None)
 
 
 def format_chunks_for_prompt(results: list[SearchResult]) -> str:
