@@ -52,3 +52,11 @@ def test_read_eval_runs_sorted_newest_first():
     runs = read_eval_runs(FIXTURES)
     timestamps = [r["timestamp"] for r in runs]
     assert timestamps == sorted(timestamps, reverse=True)
+
+
+def test_parse_run_file_precision_and_f1():
+    run = parse_run_file(FIXTURES / "results_2026-01-01T10-00-00.jsonl")
+    # record 1: hit, precision=1.0; record 2: miss, precision=0.0 → mean=0.5
+    # recall=0.5, precision=0.5 → f1 = 2*0.5*0.5/(0.5+0.5) = 0.5
+    assert abs(run["summary"]["precision"] - 0.5) < 0.001
+    assert abs(run["summary"]["f1"] - 0.5) < 0.001
