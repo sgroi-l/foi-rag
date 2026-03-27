@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>Run</th><th>Git SHA</th><th>Questions</th>
-                <th>Recall@5</th><th>Faithfulness</th><th>Judge errors</th>
+                <th>Recall@5</th><th>Precision@K</th><th>F1</th><th>Faithfulness</th><th>Judge errors</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +25,8 @@
             <td style="color: var(--subtle)">{{ run.metadata.git_sha if run.metadata else '—' }}</td>
             <td>{{ run.summary.total }}</td>
             <td class="hit">{{ "%.0f"|format(run.summary.recall * 100) }}%</td>
+            <td style="color: var(--blue, #89b4fa)">{{ "%.0f"|format(run.summary.precision * 100) }}%</td>
+            <td style="color: var(--peach, #fab387)">{{ "%.2f"|format(run.summary.f1) }}</td>
             <td style="color: var(--yellow)">{{ "%.1f"|format(run.summary.mean_faithfulness) }}/5</td>
             <td style="color: var(--subtle)">{{ run.summary.judge_errors or '—' }}</td>
         </tr>
@@ -76,6 +78,7 @@
 const runs = {{ runs | tojson }};
 const labels = runs.map(r => r.timestamp).reverse();
 const recalls = runs.map(r => r.summary.recall).reverse();
+const precisions = runs.map(r => r.summary.precision).reverse();
 const faiths = runs.map(r => r.summary.mean_faithfulness).reverse();
 
 new Chart(document.getElementById('trendChart'), {
@@ -88,6 +91,14 @@ new Chart(document.getElementById('trendChart'), {
                 data: recalls,
                 borderColor: '#89b4fa',
                 backgroundColor: '#89b4fa22',
+                yAxisID: 'yRecall',
+                tension: 0.2,
+            },
+            {
+                label: 'Precision@K',
+                data: precisions,
+                borderColor: '#fab387',
+                backgroundColor: '#fab38722',
                 yAxisID: 'yRecall',
                 tension: 0.2,
             },
@@ -134,8 +145,12 @@ function renderComparison() {
 
     summary.innerHTML =
         `<strong>Run A:</strong> ${(a.summary.recall * 100).toFixed(0)}% recall, ` +
+        `${(a.summary.precision * 100).toFixed(0)}% precision, ` +
+        `${a.summary.f1.toFixed(2)} F1, ` +
         `${a.summary.mean_faithfulness.toFixed(1)}/5 faithfulness &nbsp;|&nbsp; ` +
         `<strong>Run B:</strong> ${(b.summary.recall * 100).toFixed(0)}% recall, ` +
+        `${(b.summary.precision * 100).toFixed(0)}% precision, ` +
+        `${b.summary.f1.toFixed(2)} F1, ` +
         `${b.summary.mean_faithfulness.toFixed(1)}/5 faithfulness`;
 
     // Build lookup of Run B records by question text
