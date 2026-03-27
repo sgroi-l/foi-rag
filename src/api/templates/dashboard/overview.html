@@ -19,7 +19,7 @@
         <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.recall * 100) }}%</div>
     </div>
     <div class="stat-card">
-        <div class="stat-label">Precision@K</div>
+        <div class="stat-label">Precision@{{ latest.metadata.rerank_top_k if latest.metadata else 'K' }}</div>
         <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.precision * 100) ~ "%" if latest.summary.precision is not none else "—" }}</div>
     </div>
     <div class="stat-card">
