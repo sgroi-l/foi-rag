@@ -1,0 +1,57 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Explorer — FOI RAG{% endblock %}
+{% block content %}
+<div class="page-title">Query Explorer</div>
+<div class="page-sub">Query the RAG pipeline and see retrieved citations</div>
+
+<div class="chart-card">
+    <div class="form-group">
+        <textarea id="queryInput" rows="3" placeholder="e.g. What enforcement action has Camden taken in the private rented sector?"></textarea>
+    </div>
+    <button onclick="submitQuery()">Query</button>
+</div>
+
+<div id="results"></div>
+
+<script>
+// Submit a query to the /query endpoint and render the answer + citations.
+// CitationItem fields: foi_reference, title, page_number, chunk_id.
+// Note: chunk content is not available in citations — this view shows references only.
+async function submitQuery() {
+    const q = document.getElementById('queryInput').value.trim();
+    if (!q) return;
+
+    document.getElementById('results').innerHTML = '<div class="chart-card"><div class="info-subtle">Loading…</div></div>';
+
+    const resp = await fetch('/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q }),
+    });
+
+    if (!resp.ok) {
+        document.getElementById('results').innerHTML =
+            '<div class="chart-card"><div class="miss">No relevant documents found.</div></div>';
+        return;
+    }
+
+    const data = await resp.json();
+
+    const citHtml = data.citations.length
+        ? data.citations.map(c => `
+            <li>
+                <span class="citation-ref">${c.foi_reference}</span>
+                ${c.title} — page ${c.page_number}
+            </li>`).join('')
+        : '<li style="color: var(--subtle)">No citations returned.</li>';
+
+    document.getElementById('results').innerHTML = `
+        <div class="chart-card">
+            <div class="chart-title">Answer</div>
+            <div class="answer-box">${data.answer}</div>
+            <div class="chart-title">Citations</div>
+            <ul class="citation-list">${citHtml}</ul>
+        </div>`;
+}
+</script>
+{% endblock %}

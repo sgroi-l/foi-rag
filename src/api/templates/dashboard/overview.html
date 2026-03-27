@@ -1,0 +1,89 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Overview — FOI RAG{% endblock %}
+{% block content %}
+<div class="page-title">Overview</div>
+<div class="page-sub">System health at a glance</div>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label">Documents</div>
+        <div class="stat-value" style="color: var(--blue)">{{ corpus.doc_count }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Chunks</div>
+        <div class="stat-value" style="color: var(--purple)">{{ corpus.chunk_count }}</div>
+    </div>
+    {% if latest %}
+    <div class="stat-card">
+        <div class="stat-label">Recall@5</div>
+        <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.recall * 100) }}%</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Faithfulness</div>
+        <div class="stat-value" style="color: var(--yellow)">{{ "%.1f"|format(latest.summary.mean_faithfulness) }}/5</div>
+    </div>
+    {% else %}
+    <div class="stat-card">
+        <div class="stat-label">Recall@5</div>
+        <div class="stat-value" style="color: var(--subtle)">—</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Faithfulness</div>
+        <div class="stat-value" style="color: var(--subtle)">—</div>
+    </div>
+    {% endif %}
+</div>
+
+{% if runs %}
+<div class="grid-2">
+    <div class="chart-card">
+        <div class="chart-title">Recall@5 across runs</div>
+        <canvas id="recallChart" height="140"></canvas>
+    </div>
+    {% if latest %}
+    <div class="chart-card">
+        <div class="chart-title">Latest run</div>
+        <div class="info-row">{{ latest.timestamp }}</div>
+        {% if latest.metadata %}
+        <div class="info-subtle">git: {{ latest.metadata.git_sha }}</div>
+        <div class="info-subtle">{{ latest.summary.total }} questions · rerank_top_k: {{ latest.metadata.rerank_top_k }}</div>
+        {% endif %}
+        {% if latest.summary.judge_errors %}
+        <div class="info-subtle" style="color: var(--yellow)">{{ latest.summary.judge_errors }} judge error(s) excluded from mean</div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Runs are newest-first; reverse so chart reads left=oldest, right=newest
+const runs = {{ runs | tojson }};
+const labels = runs.map(r => r.timestamp).reverse();
+const recalls = runs.map(r => r.summary.recall).reverse();
+new Chart(document.getElementById('recallChart'), {
+    type: 'bar',
+    data: {
+        labels,
+        datasets: [{
+            label: 'Recall@5',
+            data: recalls,
+            backgroundColor: '#89b4fa55',
+            borderColor: '#89b4fa',
+            borderWidth: 1,
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { min: 0, max: 1, ticks: { color: '#6c7086', format: { style: 'percent' } }, grid: { color: '#313244' } },
+            x: { ticks: { color: '#6c7086', maxRotation: 20 }, grid: { color: '#313244' } }
+        }
+    }
+});
+</script>
+{% else %}
+<div class="chart-card">
+    <div class="info-subtle">No eval runs found in <code>eval/</code>. Run <code>make eval</code> to generate results.</div>
+</div>
+{% endif %}
+{% endblock %}
