@@ -15,8 +15,16 @@
     </div>
     {% if latest %}
     <div class="stat-card">
-        <div class="stat-label">Recall@5</div>
+        <div class="stat-label">Recall@{{ latest.metadata.rerank_top_k if latest.metadata else 'K' }}</div>
         <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.recall * 100) }}%</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Precision@{{ latest.metadata.rerank_top_k if latest.metadata else 'K' }}</div>
+        <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.precision * 100) ~ "%" if latest.summary.precision is not none else "—" }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">F1</div>
+        <div class="stat-value" style="color: var(--peach, #fab387)">{{ "%.2f"|format(latest.summary.f1) if latest.summary.f1 is not none else "—" }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">Faithfulness</div>
@@ -24,7 +32,15 @@
     </div>
     {% else %}
     <div class="stat-card">
-        <div class="stat-label">Recall@5</div>
+        <div class="stat-label">Recall@K</div>
+        <div class="stat-value" style="color: var(--subtle)">—</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Precision@K</div>
+        <div class="stat-value" style="color: var(--subtle)">—</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">F1</div>
         <div class="stat-value" style="color: var(--subtle)">—</div>
     </div>
     <div class="stat-card">
@@ -37,7 +53,7 @@
 {% if runs %}
 <div class="grid-2">
     <div class="chart-card">
-        <div class="chart-title">Recall@5 across runs</div>
+        <div class="chart-title">Retrieval metrics across runs</div>
         <canvas id="recallChart" height="140"></canvas>
     </div>
     {% if latest %}
@@ -60,22 +76,41 @@
 const runs = {{ runs | tojson }};
 const labels = runs.map(r => r.timestamp).reverse();
 const recalls = runs.map(r => r.summary.recall).reverse();
+const precisions = runs.map(r => r.summary.precision).reverse();
+const f1s = runs.map(r => r.summary.f1).reverse();
+const recallLabel = 'Recall@' + (runs[0]?.metadata?.rerank_top_k ?? 'K');
 new Chart(document.getElementById('recallChart'), {
-    type: 'bar',
+    type: 'line',
     data: {
         labels,
-        datasets: [{
-            label: 'Recall@5',
-            data: recalls,
-            backgroundColor: '#89b4fa55',
-            borderColor: '#89b4fa',
-            borderWidth: 1,
-        }]
+        datasets: [
+            {
+                label: recallLabel,
+                data: recalls,
+                borderColor: '#89b4fa',
+                backgroundColor: '#89b4fa22',
+                tension: 0.2,
+            },
+            {
+                label: 'Precision@K',
+                data: precisions,
+                borderColor: '#fab387',
+                backgroundColor: '#fab38722',
+                tension: 0.2,
+            },
+            {
+                label: 'F1',
+                data: f1s,
+                borderColor: '#cba6f7',
+                backgroundColor: '#cba6f722',
+                tension: 0.2,
+            }
+        ]
     },
     options: {
-        plugins: { legend: { display: false } },
+        plugins: { legend: { labels: { color: '#cdd6f4' } } },
         scales: {
-            y: { min: 0, max: 1, ticks: { color: '#6c7086', format: { style: 'percent' } }, grid: { color: '#313244' } },
+            y: { min: 0, max: 1, ticks: { color: '#6c7086' }, grid: { color: '#313244' } },
             x: { ticks: { color: '#6c7086', maxRotation: 20 }, grid: { color: '#313244' } }
         }
     }

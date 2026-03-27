@@ -205,3 +205,46 @@ def test_summarise_results_malformed_records():
     # scoreable: first (4) and fourth (3), mean = 3.5
     assert abs(summary["mean_faithfulness"] - 3.5) < 0.001
     assert summary["judge_errors"] == 2  # records 2 and 3 have score 0
+
+
+def test_summarise_results_precision_and_f1():
+    records = [
+        {"retrieval_hit": True,  "retrieval_precision": 1.0, "faithfulness_score": 5},
+        {"retrieval_hit": True,  "retrieval_precision": 0.5, "faithfulness_score": 4},
+        {"retrieval_hit": False, "retrieval_precision": 0.0, "faithfulness_score": 3},
+    ]
+    summary = summarise_results(records)
+    # recall = 2/3
+    assert abs(summary["recall"] - 2 / 3) < 0.001
+    # precision = (1.0 + 0.5 + 0.0) / 3 = 0.5
+    assert abs(summary["precision"] - 0.5) < 0.001
+    # f1 = 2 * 0.5 * (2/3) / (0.5 + 2/3)
+    expected_f1 = 2 * 0.5 * (2 / 3) / (0.5 + 2 / 3)
+    assert abs(summary["f1"] - expected_f1) < 0.001
+
+
+def test_summarise_results_precision_zero_no_divide_by_zero():
+    # All misses — precision=0, recall=0, f1 must be 0 not ZeroDivisionError
+    records = [
+        {"retrieval_hit": False, "retrieval_precision": 0.0, "faithfulness_score": 2},
+    ]
+    summary = summarise_results(records)
+    assert summary["precision"] == 0.0
+    assert summary["f1"] == 0.0
+
+
+def test_summarise_results_backward_compat_missing_precision():
+    # Records from old runs lack retrieval_precision — should return None (not 0.0)
+    records = [
+        {"retrieval_hit": True, "faithfulness_score": 5},
+        {"retrieval_hit": False, "faithfulness_score": 3},
+    ]
+    summary = summarise_results(records)
+    assert summary["precision"] is None
+    assert summary["f1"] is None
+
+
+def test_summarise_results_empty_has_precision_and_f1():
+    summary = summarise_results([])
+    assert summary["precision"] is None
+    assert summary["f1"] is None

@@ -82,7 +82,7 @@ async def evaluate_question(pool: asyncpg.Pool, client: anthropic.Anthropic, ent
     # rerank is a blocking Claude HTTP call — run in a thread
     reranked = await asyncio.to_thread(rerank, question, results, RERANK_TOP_K)
 
-    hit = retrieval_metrics(expected_foi, reranked).hit
+    metrics = retrieval_metrics(expected_foi, reranked)
     retrieved_fois = [r.foi_reference for r in reranked]
 
     if reranked:
@@ -101,7 +101,9 @@ async def evaluate_question(pool: asyncpg.Pool, client: anthropic.Anthropic, ent
         "question": question,
         "expected_foi": expected_foi,
         "retrieved_fois": retrieved_fois,
-        "retrieval_hit": hit,
+        "retrieval_hit": metrics.hit,
+        "retrieval_precision": metrics.precision,
+        "retrieval_rank": metrics.rank,
         "answer": answer,
         "faithfulness_score": faith_score,
         "faithfulness_reason": faith_reason,
@@ -134,7 +136,7 @@ async def main() -> None:
             print(f"[{i + 1}/{len(questions)}] {entry.get('question', '?')[:80]}")
             record = await evaluate_question(pool, client, entry)
             hit_str = "HIT" if record["retrieval_hit"] else "MISS"
-            print(f"  Retrieval: {hit_str} | Faithfulness: {record['faithfulness_score']}/5")
+            print(f"  Retrieval: {hit_str} (rank={record['retrieval_rank']}, prec={record['retrieval_precision']:.2f}) | Faithfulness: {record['faithfulness_score']}/5")
             records.append(record)
     finally:
         await pool.close()
@@ -173,6 +175,8 @@ async def main() -> None:
     summary = summarise_results(records)
     print(f"\nQuestions:         {summary['total']}")
     print(f"Recall@5:          {summary['recall']:.2f}")
+    print(f"Precision@K:       {summary['precision']:.2f}")
+    print(f"F1:                {summary['f1']:.2f}")
     print(f"Mean faithfulness: {summary['mean_faithfulness']:.1f} / 5")
     if summary["judge_errors"]:
         print(f"Judge errors:      {summary['judge_errors']} (excluded from faithfulness mean)")
