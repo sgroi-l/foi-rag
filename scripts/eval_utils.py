@@ -74,8 +74,8 @@ def summarise_results(records: list[dict]) -> dict:
         return {
             "total": 0,
             "recall": 0.0,
-            "precision": 0.0,
-            "f1": 0.0,
+            "precision": None,
+            "f1": None,
             "mean_faithfulness": 0.0,
             "judge_errors": 0,
         }
@@ -83,11 +83,16 @@ def summarise_results(records: list[dict]) -> dict:
     total = len(records)
     hits = sum(1 for r in records if r.get("retrieval_hit", False))
     recall = hits / total
-    mean_precision = sum(r.get("retrieval_precision", 0.0) for r in records) / total
+    has_precision = any("retrieval_precision" in r for r in records)
+    mean_precision = (
+        sum(r.get("retrieval_precision", 0.0) for r in records) / total
+        if has_precision
+        else None
+    )
     f1 = (
         2 * mean_precision * recall / (mean_precision + recall)
-        if (mean_precision + recall) > 0
-        else 0.0
+        if mean_precision is not None and (mean_precision + recall) > 0
+        else None if mean_precision is None else 0.0
     )
 
     scoreable = [r for r in records if r.get("faithfulness_score", 0) > 0]

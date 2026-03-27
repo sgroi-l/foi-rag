@@ -234,17 +234,17 @@ def test_summarise_results_precision_zero_no_divide_by_zero():
 
 
 def test_summarise_results_backward_compat_missing_precision():
-    # Records from old runs lack retrieval_precision — should default to 0.0
+    # Records from old runs lack retrieval_precision — should return None (not 0.0)
     records = [
         {"retrieval_hit": True, "faithfulness_score": 5},
         {"retrieval_hit": False, "faithfulness_score": 3},
     ]
     summary = summarise_results(records)
-    assert summary["precision"] == 0.0
-    assert summary["f1"] == 0.0
+    assert summary["precision"] is None
+    assert summary["f1"] is None
 
 
 def test_summarise_results_empty_has_precision_and_f1():
     summary = summarise_results([])
-    assert summary["precision"] == 0.0
-    assert summary["f1"] == 0.0
+    assert summary["precision"] is None
+    assert summary["f1"] is None

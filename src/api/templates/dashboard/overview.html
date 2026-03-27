@@ -20,11 +20,11 @@
     </div>
     <div class="stat-card">
         <div class="stat-label">Precision@K</div>
-        <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.precision * 100) }}%</div>
+        <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.precision * 100) ~ "%" if latest.summary.precision is not none else "—" }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">F1</div>
-        <div class="stat-value" style="color: var(--peach, #fab387)">{{ "%.2f"|format(latest.summary.f1) }}</div>
+        <div class="stat-value" style="color: var(--peach, #fab387)">{{ "%.2f"|format(latest.summary.f1) if latest.summary.f1 is not none else "—" }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">Faithfulness</div>
