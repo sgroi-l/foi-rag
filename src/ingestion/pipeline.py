@@ -1,4 +1,5 @@
 import hashlib
+import re
 from pathlib import Path
 
 import asyncpg
@@ -7,6 +8,11 @@ from src.ingestion.chunker import chunk_pages
 from src.ingestion.embedder import embed_texts
 from src.ingestion.extractor import extract_pages
 from src.ingestion.metadata import MetadataRow
+
+
+def _foi_reference_from_filename(filename: str) -> str | None:
+    m = re.match(r"\d+_((?:CAM|FOI)\w+)_", filename)
+    return m.group(1) if m else None
 
 
 def hash_file(path: Path) -> str:
@@ -52,7 +58,7 @@ async def ingest_file(
                            SET foi_reference=$2, date=$3, title=$4, response_text=$5, total_pages=$6
                        RETURNING id""",
                     filename,
-                    metadata.foi_reference if metadata else None,
+                    (metadata.foi_reference if metadata else None) or _foi_reference_from_filename(filename),
                     metadata.date if metadata else None,
                     metadata.title if metadata else None,
                     metadata.response_text if metadata else None,
