@@ -64,24 +64,45 @@ def parse_judge_response(text: str) -> tuple[int, str]:
 
 
 def summarise_results(records: list[dict]) -> dict:
-    """Compute recall and mean faithfulness from a list of per-question result dicts.
+    """Compute recall, precision, F1, and mean faithfulness from per-question result dicts.
 
-    Records with faithfulness_score == 0 are excluded from the faithfulness mean
-    (score 0 indicates a judge parse failure, not a genuine score).
+    Records with faithfulness_score == 0 are excluded from the faithfulness mean.
+    Records missing retrieval_precision (old format) default to 0.0 for backward compat.
     Uses safe dict access (.get) to handle malformed records gracefully.
     """
     if not records:
-        return {"total": 0, "recall": 0.0, "mean_faithfulness": 0.0, "judge_errors": 0}
+        return {
+            "total": 0,
+            "recall": 0.0,
+            "precision": 0.0,
+            "f1": 0.0,
+            "mean_faithfulness": 0.0,
+            "judge_errors": 0,
+        }
 
     total = len(records)
     hits = sum(1 for r in records if r.get("retrieval_hit", False))
+    recall = hits / total
+    mean_precision = sum(r.get("retrieval_precision", 0.0) for r in records) / total
+    f1 = (
+        2 * mean_precision * recall / (mean_precision + recall)
+        if (mean_precision + recall) > 0
+        else 0.0
+    )
+
     scoreable = [r for r in records if r.get("faithfulness_score", 0) > 0]
     judge_errors = total - len(scoreable)
-    mean_faith = sum(r.get("faithfulness_score", 0) for r in scoreable) / len(scoreable) if scoreable else 0.0
+    mean_faith = (
+        sum(r.get("faithfulness_score", 0) for r in scoreable) / len(scoreable)
+        if scoreable
+        else 0.0
+    )
 
     return {
         "total": total,
-        "recall": hits / total,
+        "recall": recall,
+        "precision": mean_precision,
+        "f1": f1,
         "mean_faithfulness": mean_faith,
         "judge_errors": judge_errors,
     }
