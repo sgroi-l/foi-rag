@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>Run</th><th>Git SHA</th><th>Questions</th>
-                <th>Recall@5</th><th>Precision@K</th><th>F1</th><th>Faithfulness</th><th>Judge errors</th>
+                <th>Recall@{{ runs[0].metadata.rerank_top_k if runs and runs[0].metadata else 'K' }}</th><th>Precision@K</th><th>F1</th><th>Faithfulness</th><th>Judge errors</th>
             </tr>
         </thead>
         <tbody>
@@ -87,7 +87,7 @@ new Chart(document.getElementById('trendChart'), {
         labels,
         datasets: [
             {
-                label: 'Recall@5',
+                label: 'Recall@' + (runs[0]?.metadata?.rerank_top_k ?? 'K'),
                 data: recalls,
                 borderColor: '#89b4fa',
                 backgroundColor: '#89b4fa22',
