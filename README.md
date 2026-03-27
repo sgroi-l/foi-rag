@@ -30,6 +30,14 @@ make ingest    # ingest PDFs into the database
 
 ---
 
+## Dashboard
+
+A built-in web dashboard is available at `/dashboard` when the API is running. It shows corpus health, eval results, pipeline config, and a live query explorer.
+
+See [docs/dashboard.md](docs/dashboard.md) for full documentation.
+
+---
+
 ## Command cheat sheet
 
 ### Docker

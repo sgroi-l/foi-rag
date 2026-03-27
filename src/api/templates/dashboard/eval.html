@@ -1,0 +1,171 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Eval — FOI RAG{% endblock %}
+{% block content %}
+<div class="page-title">Eval</div>
+<div class="page-sub">Retrieval recall and generation faithfulness across runs</div>
+
+{% if runs %}
+<div class="chart-card">
+    <div class="chart-title">Recall@5 and faithfulness over runs</div>
+    <canvas id="trendChart" height="120"></canvas>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Run</th><th>Git SHA</th><th>Questions</th>
+                <th>Recall@5</th><th>Faithfulness</th><th>Judge errors</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for run in runs %}
+        <tr>
+            <td>{{ run.timestamp }}</td>
+            <td style="color: var(--subtle)">{{ run.metadata.git_sha if run.metadata else '—' }}</td>
+            <td>{{ run.summary.total }}</td>
+            <td class="hit">{{ "%.0f"|format(run.summary.recall * 100) }}%</td>
+            <td style="color: var(--yellow)">{{ "%.1f"|format(run.summary.mean_faithfulness) }}/5</td>
+            <td style="color: var(--subtle)">{{ run.summary.judge_errors or '—' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Run comparison section -->
+<div class="chart-card">
+    <div class="chart-title">Run comparison</div>
+    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+        <div>
+            <div class="info-subtle" style="margin-bottom: 4px;">Run A</div>
+            <select id="selectA" onchange="loadRun('selectA', 'runA')">
+                <option value="">— select a run —</option>
+                {% for run in runs %}
+                <option value="{{ run.timestamp }}">{{ run.timestamp }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <div class="info-subtle" style="margin-bottom: 4px;">Run B</div>
+            <select id="selectB" onchange="loadRun('selectB', 'runB')">
+                <option value="">— select a run —</option>
+                {% for run in runs %}
+                <option value="{{ run.timestamp }}">{{ run.timestamp }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div id="comparisonSummary" style="font-size: 13px; margin-bottom: 12px; color: var(--subtle);"></div>
+    <div id="comparisonTable" style="display: none;" class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 45%">Question</th>
+                    <th>A: Hit</th><th>A: Faith</th>
+                    <th>B: Hit</th><th>B: Faith</th>
+                </tr>
+            </thead>
+            <tbody id="comparisonBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Trend chart — runs are newest-first, reverse for chronological display
+const runs = {{ runs | tojson }};
+const labels = runs.map(r => r.timestamp).reverse();
+const recalls = runs.map(r => r.summary.recall).reverse();
+const faiths = runs.map(r => r.summary.mean_faithfulness).reverse();
+
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels,
+        datasets: [
+            {
+                label: 'Recall@5',
+                data: recalls,
+                borderColor: '#89b4fa',
+                backgroundColor: '#89b4fa22',
+                yAxisID: 'yRecall',
+                tension: 0.2,
+            },
+            {
+                label: 'Faithfulness /5',
+                data: faiths,
+                borderColor: '#a6e3a1',
+                backgroundColor: '#a6e3a122',
+                yAxisID: 'yFaith',
+                tension: 0.2,
+            }
+        ]
+    },
+    options: {
+        plugins: { legend: { labels: { color: '#cdd6f4' } } },
+        scales: {
+            yRecall: { type: 'linear', position: 'left', min: 0, max: 1, ticks: { color: '#89b4fa' }, grid: { color: '#313244' } },
+            yFaith:  { type: 'linear', position: 'right', min: 0, max: 5, ticks: { color: '#a6e3a1' }, grid: { display: false } },
+            x: { ticks: { color: '#6c7086', maxRotation: 20 }, grid: { color: '#313244' } }
+        }
+    }
+});
+
+// Run comparison — fetch run data from the JSON endpoint and render side-by-side
+window.runA = null;
+window.runB = null;
+
+async function loadRun(selectId, key) {
+    const timestamp = document.getElementById(selectId).value;
+    if (!timestamp) { window[key] = null; renderComparison(); return; }
+    const resp = await fetch(`/dashboard/api/eval/${timestamp}`);
+    if (!resp.ok) { alert('Could not load run'); return; }
+    window[key] = await resp.json();
+    renderComparison();
+}
+
+function renderComparison() {
+    const a = window.runA, b = window.runB;
+    const summary = document.getElementById('comparisonSummary');
+    const table = document.getElementById('comparisonTable');
+    const tbody = document.getElementById('comparisonBody');
+
+    if (!a || !b) { table.style.display = 'none'; summary.textContent = ''; return; }
+
+    summary.innerHTML =
+        `<strong>Run A:</strong> ${(a.summary.recall * 100).toFixed(0)}% recall, ` +
+        `${a.summary.mean_faithfulness.toFixed(1)}/5 faithfulness &nbsp;|&nbsp; ` +
+        `<strong>Run B:</strong> ${(b.summary.recall * 100).toFixed(0)}% recall, ` +
+        `${b.summary.mean_faithfulness.toFixed(1)}/5 faithfulness`;
+
+    // Build lookup of Run B records by question text
+    const bByQ = {};
+    for (const r of b.records) bByQ[r.question] = r;
+
+    tbody.innerHTML = '';
+    for (const ra of a.records) {
+        const rb = bByQ[ra.question];
+        // Highlight rows where the two runs differ in hit or faithfulness (≥1 point)
+        const hitDiff = rb && ra.retrieval_hit !== rb.retrieval_hit;
+        const faithDiff = rb && Math.abs(ra.faithfulness_score - rb.faithfulness_score) >= 1;
+        const row = document.createElement('tr');
+        if (hitDiff || faithDiff) row.classList.add('diff');
+        row.innerHTML = `
+            <td style="font-size:12px">${ra.question.slice(0, 100)}${ra.question.length > 100 ? '…' : ''}</td>
+            <td class="${ra.retrieval_hit ? 'hit' : 'miss'}">${ra.retrieval_hit ? 'HIT' : 'MISS'}</td>
+            <td>${ra.faithfulness_score}/5</td>
+            <td class="${rb ? (rb.retrieval_hit ? 'hit' : 'miss') : ''}">${rb ? (rb.retrieval_hit ? 'HIT' : 'MISS') : '—'}</td>
+            <td>${rb ? rb.faithfulness_score + '/5' : '—'}</td>
+        `;
+        tbody.appendChild(row);
+    }
+    table.style.display = 'block';
+}
+</script>
+
+{% else %}
+<div class="chart-card">
+    <div class="info-subtle">No eval runs found. Run <code>make eval</code> to generate results, then refresh.</div>
+</div>
+{% endif %}
+{% endblock %}

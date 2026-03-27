@@ -1,0 +1,1 @@
+{"question": "What enforcement action?", "expected_foi": "CAM003", "retrieved_fois": ["CAM003"], "retrieval_hit": true, "answer": "Action taken.", "faithfulness_score": 5, "faithfulness_reason": "Supported.", "retrieved_chunks": []}

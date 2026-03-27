@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FOI RAG Dashboard{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg: #1e2030; --sidebar: #181825; --surface: #181825;
+            --border: #313244; --text: #cdd6f4; --subtle: #6c7086;
+            --blue: #89b4fa; --green: #a6e3a1; --yellow: #f9e2af;
+            --purple: #cba6f7; --red: #f38ba8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 180px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 12px; flex-shrink: 0; }
+        .sidebar-brand { color: var(--blue); font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+        .sidebar-sub { color: var(--subtle); font-size: 11px; margin-bottom: 24px; }
+        .nav-label { color: var(--subtle); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .nav-link { display: block; padding: 7px 10px; border-radius: 5px; color: var(--subtle); text-decoration: none; font-size: 13px; margin-bottom: 2px; }
+        .nav-link:hover { color: var(--text); background: var(--bg); }
+        .nav-link.active { color: var(--green); background: var(--bg); }
+
+        /* Main content area */
+        .main { flex: 1; overflow-y: auto; padding: 28px 32px; }
+        .page-title { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+        .page-sub { color: var(--subtle); font-size: 13px; margin-bottom: 24px; }
+
+        /* Stat cards */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+        .stat-label { color: var(--subtle); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-value { font-size: 26px; font-weight: bold; }
+
+        /* Chart / info cards */
+        .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+        .chart-title { color: var(--subtle); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+        .info-row { font-size: 13px; margin-bottom: 4px; }
+        .info-subtle { color: var(--subtle); font-size: 12px; margin-bottom: 4px; }
+
+        /* Table */
+        .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { color: var(--subtle); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+        td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        .hit { color: var(--green); font-weight: bold; }
+        .miss { color: var(--red); font-weight: bold; }
+        .diff { background: rgba(249, 226, 175, 0.08); }
+
+        /* Layout helpers */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+        /* Forms */
+        .form-group { margin-bottom: 16px; }
+        textarea, input[type=text], select {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+            color: var(--text); padding: 10px 12px; font-size: 14px; font-family: inherit;
+        }
+        textarea { width: 100%; resize: vertical; }
+        select { padding: 7px 10px; font-size: 13px; }
+        button { background: var(--blue); color: #1e2030; border: none; border-radius: 6px; padding: 9px 20px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        button:hover { opacity: 0.9; }
+
+        /* Explorer */
+        .answer-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; line-height: 1.6; white-space: pre-wrap; }
+        .citation-list { list-style: none; }
+        .citation-list li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+        .citation-list li:last-child { border-bottom: none; }
+        .citation-ref { color: var(--blue); font-weight: bold; margin-right: 8px; }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-brand">FOI RAG</div>
+        <div class="sidebar-sub">Dashboard</div>
+        <div class="nav-label">Navigation</div>
+        <a href="/dashboard" class="nav-link {% if active == 'overview' %}active{% endif %}">Overview</a>
+        <a href="/dashboard/corpus" class="nav-link {% if active == 'corpus' %}active{% endif %}">Corpus</a>
+        <a href="/dashboard/eval" class="nav-link {% if active == 'eval' %}active{% endif %}">Eval</a>
+        <a href="/dashboard/pipeline" class="nav-link {% if active == 'pipeline' %}active{% endif %}">Pipeline</a>
+        <a href="/dashboard/explorer" class="nav-link {% if active == 'explorer' %}active{% endif %}">Explorer</a>
+    </nav>
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

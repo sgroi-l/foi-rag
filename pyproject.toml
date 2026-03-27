@@ -13,9 +13,11 @@ dependencies = [
     "python-dotenv",
     "pandas",
     "requests",
+    "jinja2",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
+    "pytest-asyncio",
 ]

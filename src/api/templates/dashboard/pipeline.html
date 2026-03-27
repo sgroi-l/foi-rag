@@ -1,0 +1,37 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Pipeline — FOI RAG{% endblock %}
+{% block content %}
+<div class="page-title">Pipeline Config</div>
+<div class="page-sub">Configuration from the most recent eval run</div>
+
+{% if run and run.metadata %}
+{% set meta = run.metadata %}
+<div class="chart-card">
+    <div class="chart-title">Run</div>
+    <div class="info-row">{{ run.timestamp }}</div>
+    <div class="info-subtle">git SHA: {{ meta.git_sha }}</div>
+</div>
+
+<div class="chart-card">
+    <div class="chart-title">Retrieval settings</div>
+    <div class="info-row">rerank_top_k: <strong>{{ meta.rerank_top_k }}</strong></div>
+</div>
+
+<div class="chart-card">
+    <div class="chart-title">Models</div>
+    {% if meta.models %}
+    <div class="info-row">Judge: <strong>{{ meta.models.judge }}</strong></div>
+    {% endif %}
+</div>
+
+<div class="chart-card">
+    <div class="chart-title">Question set</div>
+    <div class="info-subtle">{{ meta.question_set }}</div>
+</div>
+
+{% else %}
+<div class="chart-card">
+    <div class="info-subtle">No eval run with metadata found. Run <code>make eval</code> first.</div>
+</div>
+{% endif %}
+{% endblock %}

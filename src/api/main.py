@@ -8,7 +8,7 @@ from fastapi import FastAPI
 
 load_dotenv()
 
-from src.api.routes import documents, ingest, query
+from src.api.routes import documents, ingest, query, dashboard
 
 
 def read_schema_sql() -> str:
@@ -31,6 +31,7 @@ app = FastAPI(title="Camden FOI RAG", lifespan=lifespan)
 app.include_router(query.router)
 app.include_router(documents.router)
 app.include_router(ingest.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/health")
