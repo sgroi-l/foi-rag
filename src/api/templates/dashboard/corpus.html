@@ -28,7 +28,7 @@
 const dist = {{ stats.chunk_size_distribution | tojson }};
 const labels = Object.keys(dist);
 const values = Object.values(dist);
-new Chart(document.getElementById('distChart'), {
+window.__charts.push(new Chart(document.getElementById('distChart'), {
     type: 'bar',
     data: {
         labels,
@@ -43,10 +43,10 @@ new Chart(document.getElementById('distChart'), {
     options: {
         plugins: { legend: { display: false } },
         scales: {
-            y: { ticks: { color: '#6c7086' }, grid: { color: '#313244' } },
-            x: { ticks: { color: '#6c7086' }, grid: { color: '#313244' } }
+            y: { ticks: { color: getCSSVar('--chart-tick') }, grid: { color: getCSSVar('--chart-grid') } },
+            x: { ticks: { color: getCSSVar('--chart-tick') }, grid: { color: getCSSVar('--chart-grid') } }
         }
     }
-});
+}));
 </script>
 {% endblock %}

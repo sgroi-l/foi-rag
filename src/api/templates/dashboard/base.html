@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}FOI RAG Dashboard{% endblock %}</title>
+    <script>
+        // Apply saved theme before render to avoid flash
+        (function() {
+            const t = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
@@ -11,18 +18,29 @@
             --border: #313244; --text: #cdd6f4; --subtle: #6c7086;
             --blue: #89b4fa; --green: #a6e3a1; --yellow: #f9e2af;
             --purple: #cba6f7; --red: #f38ba8;
+            --chart-grid: #313244; --chart-tick: #6c7086; --chart-legend: #cdd6f4;
+        }
+        [data-theme="light"] {
+            --bg: #eff1f5; --sidebar: #e6e9ef; --surface: #e6e9ef;
+            --border: #ccd0da; --text: #4c4f69; --subtle: #8c8fa1;
+            --blue: #1e66f5; --green: #40a02b; --yellow: #df8e1d;
+            --purple: #8839ef; --red: #d20f39;
+            --chart-grid: #ccd0da; --chart-tick: #8c8fa1; --chart-legend: #4c4f69;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
         /* Sidebar */
-        .sidebar { width: 180px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 12px; flex-shrink: 0; }
+        .sidebar { width: 180px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 12px; flex-shrink: 0; display: flex; flex-direction: column; }
         .sidebar-brand { color: var(--blue); font-weight: bold; font-size: 15px; margin-bottom: 4px; }
         .sidebar-sub { color: var(--subtle); font-size: 11px; margin-bottom: 24px; }
         .nav-label { color: var(--subtle); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
         .nav-link { display: block; padding: 7px 10px; border-radius: 5px; color: var(--subtle); text-decoration: none; font-size: 13px; margin-bottom: 2px; }
         .nav-link:hover { color: var(--text); background: var(--bg); }
         .nav-link.active { color: var(--green); background: var(--bg); }
+        .sidebar-spacer { flex: 1; }
+        .theme-toggle { display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); border-radius: 5px; color: var(--subtle); padding: 6px 10px; font-size: 12px; font-weight: normal; cursor: pointer; width: 100%; }
+        .theme-toggle:hover { color: var(--text); background: var(--bg); opacity: 1; }
 
         /* Main content area */
         .main { flex: 1; overflow-y: auto; padding: 28px 32px; }
@@ -49,7 +67,7 @@
         tr:last-child td { border-bottom: none; }
         .hit { color: var(--green); font-weight: bold; }
         .miss { color: var(--red); font-weight: bold; }
-        .diff { background: rgba(249, 226, 175, 0.08); }
+        .diff { background: rgba(136, 57, 239, 0.08); }
 
         /* Layout helpers */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -62,7 +80,7 @@
         }
         textarea { width: 100%; resize: vertical; }
         select { padding: 7px 10px; font-size: 13px; }
-        button { background: var(--blue); color: #1e2030; border: none; border-radius: 6px; padding: 9px 20px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        button { background: var(--blue); color: var(--bg); border: none; border-radius: 6px; padding: 9px 20px; font-size: 14px; font-weight: bold; cursor: pointer; }
         button:hover { opacity: 0.9; }
 
         /* Explorer */
@@ -72,6 +90,46 @@
         .citation-list li:last-child { border-bottom: none; }
         .citation-ref { color: var(--blue); font-weight: bold; margin-right: 8px; }
     </style>
+    <script>
+        window.__charts = [];
+
+        function getCSSVar(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
+        function updateChartTheme() {
+            const grid = getCSSVar('--chart-grid');
+            const tick = getCSSVar('--chart-tick');
+            const legend = getCSSVar('--chart-legend');
+            window.__charts.forEach(function(chart) {
+                if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+                    chart.options.plugins.legend.labels.color = legend;
+                }
+                Object.values(chart.options.scales || {}).forEach(function(scale) {
+                    if (scale.ticks) scale.ticks.color = tick;
+                    if (scale.grid) scale.grid.color = grid;
+                });
+                chart.update();
+            });
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            if (next === 'light') {
+                icon.textContent = '\u263D';
+                label.textContent = 'Dark mode';
+            } else {
+                icon.textContent = '\u2600';
+                label.textContent = 'Light mode';
+            }
+            updateChartTheme();
+        }
+    </script>
 </head>
 <body>
     <nav class="sidebar">
@@ -83,9 +141,29 @@
         <a href="/dashboard/eval" class="nav-link {% if active == 'eval' %}active{% endif %}">Eval</a>
         <a href="/dashboard/pipeline" class="nav-link {% if active == 'pipeline' %}active{% endif %}">Pipeline</a>
         <a href="/dashboard/explorer" class="nav-link {% if active == 'explorer' %}active{% endif %}">Explorer</a>
+        <div class="sidebar-spacer"></div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+            <span id="themeIcon"></span>
+            <span id="themeLabel"></span>
+        </button>
     </nav>
     <main class="main">
         {% block content %}{% endblock %}
     </main>
+    <script>
+        // Set initial toggle label/icon based on current theme
+        (function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            if (theme === 'light') {
+                icon.textContent = '\u263D';
+                label.textContent = 'Dark mode';
+            } else {
+                icon.textContent = '\u2600';
+                label.textContent = 'Light mode';
+            }
+        })();
+    </script>
 </body>
 </html>

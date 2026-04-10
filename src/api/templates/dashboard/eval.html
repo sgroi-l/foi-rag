@@ -81,7 +81,7 @@ const recalls = runs.map(r => r.summary.recall).reverse();
 const precisions = runs.map(r => r.summary.precision).reverse();
 const faiths = runs.map(r => r.summary.mean_faithfulness).reverse();
 
-new Chart(document.getElementById('trendChart'), {
+window.__charts.push(new Chart(document.getElementById('trendChart'), {
     type: 'line',
     data: {
         labels,
@@ -113,14 +113,14 @@ new Chart(document.getElementById('trendChart'), {
         ]
     },
     options: {
-        plugins: { legend: { labels: { color: '#cdd6f4' } } },
+        plugins: { legend: { labels: { color: getCSSVar('--chart-legend') } } },
         scales: {
-            yRecall: { type: 'linear', position: 'left', min: 0, max: 1, ticks: { color: '#89b4fa' }, grid: { color: '#313244' } },
+            yRecall: { type: 'linear', position: 'left', min: 0, max: 1, ticks: { color: '#89b4fa' }, grid: { color: getCSSVar('--chart-grid') } },
             yFaith:  { type: 'linear', position: 'right', min: 0, max: 5, ticks: { color: '#a6e3a1' }, grid: { display: false } },
-            x: { ticks: { color: '#6c7086', maxRotation: 20 }, grid: { color: '#313244' } }
+            x: { ticks: { color: getCSSVar('--chart-tick'), maxRotation: 20 }, grid: { color: getCSSVar('--chart-grid') } }
         }
     }
-});
+}));
 
 // Run comparison — fetch run data from the JSON endpoint and render side-by-side
 window.runA = null;

@@ -79,7 +79,7 @@ const recalls = runs.map(r => r.summary.recall).reverse();
 const precisions = runs.map(r => r.summary.precision).reverse();
 const f1s = runs.map(r => r.summary.f1).reverse();
 const recallLabel = 'Recall@' + (runs[0]?.metadata?.rerank_top_k ?? 'K');
-new Chart(document.getElementById('recallChart'), {
+window.__charts.push(new Chart(document.getElementById('recallChart'), {
     type: 'line',
     data: {
         labels,
@@ -108,13 +108,13 @@ new Chart(document.getElementById('recallChart'), {
         ]
     },
     options: {
-        plugins: { legend: { labels: { color: '#cdd6f4' } } },
+        plugins: { legend: { labels: { color: getCSSVar('--chart-legend') } } },
         scales: {
-            y: { min: 0, max: 1, ticks: { color: '#6c7086' }, grid: { color: '#313244' } },
-            x: { ticks: { color: '#6c7086', maxRotation: 20 }, grid: { color: '#313244' } }
+            y: { min: 0, max: 1, ticks: { color: getCSSVar('--chart-tick') }, grid: { color: getCSSVar('--chart-grid') } },
+            x: { ticks: { color: getCSSVar('--chart-tick'), maxRotation: 20 }, grid: { color: getCSSVar('--chart-grid') } }
         }
     }
-});
+}));
 </script>
 {% else %}
 <div class="chart-card">
