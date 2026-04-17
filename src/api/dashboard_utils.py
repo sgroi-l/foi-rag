@@ -6,42 +6,17 @@ import asyncpg
 
 def _summarise(records: list[dict], k: int | None) -> dict:
     if not records:
-        return {"total": 0, "recall": 0.0, "precision": None, "f1": None, "mean_faithfulness": 0.0, "judge_errors": 0, "mrr": 0.0, "k": k}
+        return {"total": 0, "recall": 0.0, "precision": 0.0, "mrr": 0.0, "k": k}
 
     total = len(records)
-    hits = sum(1 for r in records if r.get("retrieval_hit", False))
-    recall = hits / total
-
-    has_precision = any("retrieval_precision" in r for r in records)
-    mean_precision = (
-        sum(r.get("retrieval_precision", 0.0) for r in records) / total
-        if has_precision else None
-    )
-    f1 = (
-        2 * mean_precision * recall / (mean_precision + recall)
-        if mean_precision is not None and (mean_precision + recall) > 0
-        else None if mean_precision is None else 0.0
-    )
-
-    scoreable = [r for r in records if r.get("faithfulness_score", 0) > 0]
-    judge_errors = total - len(scoreable)
-    mean_faith = (
-        sum(r["faithfulness_score"] for r in scoreable) / len(scoreable)
-        if scoreable else 0.0
-    )
-
-    mrr = sum(
-        1.0 / r["retrieval_rank"] for r in records
-        if r.get("retrieval_rank") and r["retrieval_rank"] > 0
-    ) / total
+    recall = sum(r.get("recall", 0.0) for r in records) / total
+    precision = sum(r.get("precision", 0.0) for r in records) / total
+    mrr = sum(r.get("rr", 0.0) for r in records) / total
 
     return {
         "total": total,
         "recall": recall,
-        "precision": mean_precision,
-        "f1": f1,
-        "mean_faithfulness": mean_faith,
-        "judge_errors": judge_errors,
+        "precision": precision,
         "mrr": mrr,
         "k": k,
     }
