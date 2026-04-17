@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import tiktoken
 
 ENCODING = tiktoken.get_encoding("cl100k_base")
-MAX_TOKENS = 800
+MAX_TOKENS = 250
 
 
 @dataclass
@@ -22,21 +22,21 @@ def split_sentences(text: str) -> list[str]:
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
 
 
-def chunk_pages(pages: list[tuple[int, str]]) -> list[Chunk]:
+def chunk_pages(pages: list[tuple[int, str]], max_tokens: int = MAX_TOKENS) -> list[Chunk]:
     chunks = []
     for page_number, raw_text in pages:
         text = re.sub(r"\n{3,}", "\n\n", raw_text).strip()
         if not text:
             continue
         tokens = count_tokens(text)
-        if tokens <= MAX_TOKENS:
+        if tokens <= max_tokens:
             chunks.append(Chunk(page_number, 0, text, tokens))
         else:
             sentences = split_sentences(text)
             current, current_tokens, idx = [], 0, 1
             for sentence in sentences:
                 st = count_tokens(sentence)
-                if current_tokens + st > MAX_TOKENS and current:
+                if current_tokens + st > max_tokens and current:
                     content = " ".join(current)
                     chunks.append(Chunk(page_number, idx, content, count_tokens(content)))
                     idx += 1

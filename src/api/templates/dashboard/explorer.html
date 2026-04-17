@@ -14,9 +14,15 @@
 <div id="results"></div>
 
 <script>
-// Submit a query to the /query endpoint and render the answer + citations.
-// CitationItem fields: foi_reference, title, page_number, chunk_id.
-// Note: chunk content is not available in citations — this view shows references only.
+function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function linkSources(text) {
+    return escapeHtml(text).replace(/\[SOURCE (\d+)\]/g,
+        (_, n) => `<a href="#source-${n}" class="source-link">[SOURCE ${n}]</a>`);
+}
+
 async function submitQuery() {
     const q = document.getElementById('queryInput').value.trim();
     if (!q) return;
@@ -38,20 +44,41 @@ async function submitQuery() {
     const data = await resp.json();
 
     const citHtml = data.citations.length
-        ? data.citations.map(c => `
-            <li>
-                <span class="citation-ref">${c.foi_reference}</span>
-                ${c.title} — page ${c.page_number}
-            </li>`).join('')
-        : '<li style="color: var(--subtle)">No citations returned.</li>';
+        ? data.citations.map((c, i) => `
+            <div class="citation-card" id="source-${i+1}">
+                <div class="citation-card-header">
+                    <span class="source-badge">SOURCE ${i+1}</span>
+                    <span class="citation-ref">${escapeHtml(c.foi_reference)}</span>
+                    <span class="citation-meta"> — page ${c.page_number}</span>
+                    <span class="citation-chunk-id">${escapeHtml(c.chunk_id)}</span>
+                </div>
+                ${c.title ? `<div class="citation-title">${escapeHtml(c.title)}</div>` : ''}
+                <div class="citation-content">${escapeHtml(c.content)}</div>
+            </div>`).join('')
+        : '<div style="color: var(--subtle)">No citations returned.</div>';
 
     document.getElementById('results').innerHTML = `
         <div class="chart-card">
             <div class="chart-title">Answer</div>
-            <div class="answer-box">${data.answer}</div>
+            <div class="answer-box">${linkSources(data.answer)}</div>
+        </div>
+        <div class="chart-card">
             <div class="chart-title">Citations</div>
-            <ul class="citation-list">${citHtml}</ul>
+            ${citHtml}
         </div>`;
 }
 </script>
+
+<style>
+.source-link { color: #89b4fa; text-decoration: none; font-weight: 600; }
+.source-link:hover { text-decoration: underline; }
+.citation-card { border: 1px solid #313244; border-radius: 6px; padding: 12px; margin-bottom: 10px; scroll-margin-top: 80px; }
+.citation-card:target { border-color: #89b4fa; }
+.citation-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.source-badge { background: #313244; color: #89b4fa; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+.citation-meta { color: var(--subtle); font-size: 13px; }
+.citation-chunk-id { color: #45475a; font-size: 11px; font-family: monospace; margin-left: auto; }
+.citation-title { font-size: 13px; color: #cdd6f4; margin-bottom: 6px; }
+.citation-content { font-size: 13px; color: #a6adc8; line-height: 1.6; white-space: pre-wrap; border-top: 1px solid #313244; padding-top: 8px; margin-top: 4px; }
+</style>
 {% endblock %}

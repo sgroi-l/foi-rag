@@ -14,6 +14,7 @@ class CitationItem(BaseModel):
     title: str
     page_number: int
     chunk_id: str
+    content: str = ""
 
 
 class QueryResponse(BaseModel):

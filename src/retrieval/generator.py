@@ -10,6 +10,7 @@ class Citation:
     title: str
     page_number: int
     chunk_id: str
+    content: str = ""
 
 
 @dataclass
@@ -55,8 +56,9 @@ Answer with inline citations:"""
             title=r.title,
             page_number=r.page_number,
             chunk_id=r.chunk_id,
+            content=r.content,
         )
-        for i, r in enumerate(results)
+        for r in results
     ]
 
     return GeneratedAnswer(answer=answer, citations=citations, prompt_sent=prompt)

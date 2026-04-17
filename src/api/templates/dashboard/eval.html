@@ -2,11 +2,11 @@
 {% block title %}Eval — FOI RAG{% endblock %}
 {% block content %}
 <div class="page-title">Eval</div>
-<div class="page-sub">Retrieval recall and generation faithfulness across runs</div>
+<div class="page-sub">Retrieval metrics across runs</div>
 
 {% if runs %}
 <div class="chart-card">
-    <div class="chart-title">Recall@K and faithfulness over runs</div>
+    <div class="chart-title">Recall@K, Precision@K and MRR over runs</div>
     <canvas id="trendChart" height="120"></canvas>
 </div>
 
@@ -14,8 +14,8 @@
     <table>
         <thead>
             <tr>
-                <th>Run</th><th>Git SHA</th><th>Questions</th>
-                <th>Recall@K</th><th>Precision@K</th><th>F1</th><th>Faithfulness</th><th>Judge errors</th>
+                <th>Run</th><th>Git SHA</th><th>k</th><th>Questions</th>
+                <th>Recall@K</th><th>Precision@K</th><th>MRR</th>
             </tr>
         </thead>
         <tbody>
@@ -23,17 +23,92 @@
         <tr>
             <td>{{ run.timestamp }}</td>
             <td style="color: var(--subtle)">{{ run.metadata.git_sha if run.metadata else '—' }}</td>
+            <td>{{ run.summary.k or '—' }}</td>
             <td>{{ run.summary.total }}</td>
-            <td class="hit">{{ "%.0f"|format(run.summary.recall * 100) }}%</td>
-            <td style="color: var(--blue, #89b4fa)">{{ "%.0f"|format(run.summary.precision * 100) ~ "%" if run.summary.precision is not none else "—" }}</td>
-            <td style="color: var(--peach, #fab387)">{{ "%.2f"|format(run.summary.f1) if run.summary.f1 is not none else "—" }}</td>
-            <td style="color: var(--yellow)">{{ "%.1f"|format(run.summary.mean_faithfulness) }}/5</td>
-            <td style="color: var(--subtle)">{{ run.summary.judge_errors or '—' }}</td>
+            <td class="hit">{{ "%.0f"|format(run.summary.avg_recall * 100) }}%</td>
+            <td style="color: var(--blue, #89b4fa)">{{ "%.0f"|format(run.summary.avg_precision * 100) }}%</td>
+            <td style="color: var(--peach, #fab387)">{{ "%.2f"|format(run.summary.mrr) }}</td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
+
+{% if chunk_sweeps %}
+<!-- Chunk size experiment section -->
+<div class="chart-card">
+    <div class="chart-title">Experiment 2: Chunk size sweep</div>
+    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+        <div>
+            <div class="info-subtle" style="margin-bottom: 4px;">Sweep run</div>
+            <select id="sweepSelect" onchange="renderSweep()">
+                {% for sweep in chunk_sweeps %}
+                <option value="{{ loop.index0 }}">{{ sweep.timestamp }} (git {{ sweep.git_sha }})</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <canvas id="sweepChart" height="100"></canvas>
+    <table style="margin-top: 16px;">
+        <thead>
+            <tr>
+                <th>Chunk size</th><th>Chunks</th>
+                <th>Avg P@5</th><th>Avg R@5</th><th>MRR</th>
+            </tr>
+        </thead>
+        <tbody id="sweepTableBody"></tbody>
+    </table>
+</div>
+
+<script>
+const chunkSweeps = {{ chunk_sweeps | tojson }};
+let sweepChartInstance = null;
+
+function renderSweep() {
+    const idx = parseInt(document.getElementById('sweepSelect').value);
+    const sweep = chunkSweeps[idx];
+    const rows = sweep.rows;
+
+    const labels = rows.map(r => r.chunk_size + ' tokens');
+    const precisions = rows.map(r => r.avg_precision);
+    const recalls = rows.map(r => r.avg_recall);
+    const mrrs = rows.map(r => r.mrr);
+
+    if (sweepChartInstance) sweepChartInstance.destroy();
+    sweepChartInstance = new Chart(document.getElementById('sweepChart'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                { label: 'Avg P@5', data: precisions, backgroundColor: '#fab38799', borderColor: '#fab387', borderWidth: 1 },
+                { label: 'Avg R@5', data: recalls,    backgroundColor: '#89b4fa99', borderColor: '#89b4fa', borderWidth: 1 },
+                { label: 'MRR',     data: mrrs,        backgroundColor: '#cba6f799', borderColor: '#cba6f7', borderWidth: 1 },
+            ]
+        },
+        options: {
+            plugins: { legend: { labels: { color: '#cdd6f4' } } },
+            scales: {
+                y: { min: 0, max: 1, ticks: { color: '#6c7086' }, grid: { color: '#313244' } },
+                x: { ticks: { color: '#6c7086' }, grid: { color: '#313244' } }
+            }
+        }
+    });
+
+    const tbody = document.getElementById('sweepTableBody');
+    tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td>${r.chunk_size}</td>
+            <td style="color: var(--subtle)">${r.n_chunks}</td>
+            <td style="color: #fab387">${(r.avg_precision * 100).toFixed(1)}%</td>
+            <td style="color: #89b4fa">${(r.avg_recall * 100).toFixed(1)}%</td>
+            <td style="color: #cba6f7">${r.mrr.toFixed(3)}</td>
+        </tr>
+    `).join('');
+}
+
+renderSweep();
+</script>
+{% endif %}
 
 <!-- Run comparison section -->
 <div class="chart-card">
@@ -63,9 +138,9 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 45%">Question</th>
-                    <th>A: Hit</th><th>A: Faith</th>
-                    <th>B: Hit</th><th>B: Faith</th>
+                    <th style="width: 40%">Question</th>
+                    <th>A: P@K</th><th>A: R@K</th><th>A: RR</th>
+                    <th>B: P@K</th><th>B: R@K</th><th>B: RR</th>
                 </tr>
             </thead>
             <tbody id="comparisonBody"></tbody>
@@ -74,55 +149,32 @@
 </div>
 
 <script>
-// Trend chart — runs are newest-first, reverse for chronological display
 const runs = {{ runs | tojson }};
 const labels = runs.map(r => r.timestamp).reverse();
-const recalls = runs.map(r => r.summary.recall).reverse();
-const precisions = runs.map(r => r.summary.precision).reverse();
-const faiths = runs.map(r => r.summary.mean_faithfulness).reverse();
+const recalls = runs.map(r => r.summary.avg_recall).reverse();
+const precisions = runs.map(r => r.summary.avg_precision).reverse();
+const mrrs = runs.map(r => r.summary.mrr).reverse();
+const k = runs[0]?.summary?.k ?? 'K';
 
 new Chart(document.getElementById('trendChart'), {
     type: 'line',
     data: {
         labels,
         datasets: [
-            {
-                label: 'Recall@K',
-                data: recalls,
-                borderColor: '#89b4fa',
-                backgroundColor: '#89b4fa22',
-                yAxisID: 'yRecall',
-                tension: 0.2,
-            },
-            {
-                label: 'Precision@K',
-                data: precisions,
-                borderColor: '#fab387',
-                backgroundColor: '#fab38722',
-                yAxisID: 'yRecall',
-                tension: 0.2,
-            },
-            {
-                label: 'Faithfulness /5',
-                data: faiths,
-                borderColor: '#a6e3a1',
-                backgroundColor: '#a6e3a122',
-                yAxisID: 'yFaith',
-                tension: 0.2,
-            }
+            { label: `Recall@${k}`, data: recalls, borderColor: '#89b4fa', backgroundColor: '#89b4fa22', tension: 0.2 },
+            { label: `Precision@${k}`, data: precisions, borderColor: '#fab387', backgroundColor: '#fab38722', tension: 0.2 },
+            { label: 'MRR', data: mrrs, borderColor: '#cba6f7', backgroundColor: '#cba6f722', tension: 0.2 },
         ]
     },
     options: {
         plugins: { legend: { labels: { color: '#cdd6f4' } } },
         scales: {
-            yRecall: { type: 'linear', position: 'left', min: 0, max: 1, ticks: { color: '#89b4fa' }, grid: { color: '#313244' } },
-            yFaith:  { type: 'linear', position: 'right', min: 0, max: 5, ticks: { color: '#a6e3a1' }, grid: { display: false } },
+            y: { min: 0, max: 1, ticks: { color: '#6c7086' }, grid: { color: '#313244' } },
             x: { ticks: { color: '#6c7086', maxRotation: 20 }, grid: { color: '#313244' } }
         }
     }
 });
 
-// Run comparison — fetch run data from the JSON endpoint and render side-by-side
 window.runA = null;
 window.runB = null;
 
@@ -143,36 +195,31 @@ function renderComparison() {
 
     if (!a || !b) { table.style.display = 'none'; summary.textContent = ''; return; }
 
-    const fmtPct = v => v != null ? `${(v * 100).toFixed(0)}%` : '—';
-    const fmtF1  = v => v != null ? v.toFixed(2) : '—';
+    const pct = v => v != null ? `${(v * 100).toFixed(0)}%` : '—';
+    const fmt = v => v != null ? v.toFixed(2) : '—';
     summary.innerHTML =
-        `<strong>Run A:</strong> ${fmtPct(a.summary.recall)} recall, ` +
-        `${fmtPct(a.summary.precision)} precision, ` +
-        `${fmtF1(a.summary.f1)} F1, ` +
-        `${a.summary.mean_faithfulness.toFixed(1)}/5 faithfulness &nbsp;|&nbsp; ` +
-        `<strong>Run B:</strong> ${fmtPct(b.summary.recall)} recall, ` +
-        `${fmtPct(b.summary.precision)} precision, ` +
-        `${fmtF1(b.summary.f1)} F1, ` +
-        `${b.summary.mean_faithfulness.toFixed(1)}/5 faithfulness`;
+        `<strong>Run A:</strong> ${pct(a.summary.avg_recall)} recall, ${pct(a.summary.avg_precision)} precision, ${fmt(a.summary.mrr)} MRR &nbsp;|&nbsp; ` +
+        `<strong>Run B:</strong> ${pct(b.summary.avg_recall)} recall, ${pct(b.summary.avg_precision)} precision, ${fmt(b.summary.mrr)} MRR`;
 
-    // Build lookup of Run B records by question text
     const bByQ = {};
     for (const r of b.records) bByQ[r.question] = r;
 
     tbody.innerHTML = '';
     for (const ra of a.records) {
         const rb = bByQ[ra.question];
-        // Highlight rows where the two runs differ in hit or faithfulness (≥1 point)
-        const hitDiff = rb && ra.retrieval_hit !== rb.retrieval_hit;
-        const faithDiff = rb && Math.abs(ra.faithfulness_score - rb.faithfulness_score) >= 1;
+        const changed = rb && (
+            Math.abs(ra.precision - rb.precision) > 0.01 ||
+            Math.abs(ra.recall - rb.recall) > 0.01 ||
+            Math.abs(ra.rr - rb.rr) > 0.01
+        );
         const row = document.createElement('tr');
-        if (hitDiff || faithDiff) row.classList.add('diff');
+        if (changed) row.classList.add('diff');
         row.innerHTML = `
-            <td style="font-size:12px">${ra.question.slice(0, 100)}${ra.question.length > 100 ? '…' : ''}</td>
-            <td class="${ra.retrieval_hit ? 'hit' : 'miss'}">${ra.retrieval_hit ? 'HIT' : 'MISS'}</td>
-            <td>${ra.faithfulness_score}/5</td>
-            <td class="${rb ? (rb.retrieval_hit ? 'hit' : 'miss') : ''}">${rb ? (rb.retrieval_hit ? 'HIT' : 'MISS') : '—'}</td>
-            <td>${rb ? rb.faithfulness_score + '/5' : '—'}</td>
+            <td style="font-size:12px">${ra.question.slice(0, 90)}${ra.question.length > 90 ? '…' : ''}</td>
+            <td>${fmt(ra.precision)}</td><td>${fmt(ra.recall)}</td><td>${fmt(ra.rr)}</td>
+            <td>${rb ? fmt(rb.precision) : '—'}</td>
+            <td>${rb ? fmt(rb.recall) : '—'}</td>
+            <td>${rb ? fmt(rb.rr) : '—'}</td>
         `;
         tbody.appendChild(row);
     }

@@ -35,7 +35,7 @@ ingest:
 
 # Generate synthetic evaluation question set (run once)
 generate-eval-set:
-	uv run python3 scripts/generate_eval_set.py
+	uv run python3 scripts/generate_eval_set.pyde 
 
 # Run the evaluation harness
 eval:

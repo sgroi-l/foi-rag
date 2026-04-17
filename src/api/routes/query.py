@@ -50,6 +50,7 @@ async def query(request: Request, body: QueryRequest):
                 title=c.title,
                 page_number=c.page_number,
                 chunk_id=c.chunk_id,
+                content=c.content,
             )
             for c in answer.citations
         ],

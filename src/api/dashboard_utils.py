@@ -1,39 +1,28 @@
 import json
-import sys
 from pathlib import Path
 
 import asyncpg
 
-# Project root must be on sys.path for the scripts package to be importable.
-# dashboard_utils is loaded as part of the server process, not run directly,
-# so the project root is not automatically on sys.path.
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from scripts.eval_utils import summarise_results
+
+def _summarise(records: list[dict], k: int | None) -> dict:
+    if not records:
+        return {"total": 0, "avg_precision": 0.0, "avg_recall": 0.0, "mrr": 0.0, "k": k}
+    total = len(records)
+    return {
+        "total": total,
+        "avg_precision": sum(r.get("precision", 0.0) for r in records) / total,
+        "avg_recall": sum(r.get("recall", 0.0) for r in records) / total,
+        "mrr": sum(r.get("rr", 0.0) for r in records) / total,
+        "k": k,
+    }
 
 
 def parse_run_file(path: Path) -> dict:
-    """Parse a single eval results JSONL file.
-
-    Returns a dict with keys:
-        timestamp (str): from metadata["timestamp"] or derived from filename stem.
-        metadata (dict | None): the _type: metadata record, or None if absent.
-        records (list[dict]): per-question result dicts.
-        summary (dict): recall, mean_faithfulness, etc. via summarise_results().
-
-    If the first line has _type: "metadata", it is consumed as the metadata record
-    and all remaining lines are result records. Otherwise metadata is None and all
-    lines are treated as result records. Empty files return zeros.
-    """
     text = path.read_text().strip()
     filename_timestamp = path.stem.removeprefix("results_")
 
     if not text:
-        return {
-            "timestamp": filename_timestamp,
-            "metadata": None,
-            "records": [],
-            "summary": summarise_results([]),
-        }
+        return {"timestamp": filename_timestamp, "metadata": None, "records": [], "summary": _summarise([], None)}
 
     lines = text.splitlines()
     first = json.loads(lines[0])
@@ -48,42 +37,43 @@ def parse_run_file(path: Path) -> dict:
         record_lines = lines
 
     records = [json.loads(line) for line in record_lines if line.strip()]
+    k = metadata.get("k") if metadata else None
 
     return {
         "timestamp": timestamp,
         "metadata": metadata,
         "records": records,
-        "summary": summarise_results(records),
+        "summary": _summarise(records, k),
     }
 
 
 def read_eval_runs(eval_dir: Path) -> list[dict]:
-    """Return all eval runs from eval_dir, sorted newest-first.
-
-    Sorts by lexicographic order on timestamp string (YYYY-MM-DDTHH-MM-SS),
-    which is equivalent to chronological order for this format.
-
-    Recommended eval_dir resolution from a route handler:
-        Path(__file__).parent.parent.parent.parent / "eval"
-    """
     files = sorted(eval_dir.glob("results_*.jsonl"), reverse=True)
     return [parse_run_file(f) for f in files]
 
 
-async def get_corpus_stats(pool: asyncpg.Pool) -> dict:
-    """Query the database for corpus statistics.
+def read_chunk_sweeps(eval_dir: Path) -> list[dict]:
+    """Return chunk sweep results, most recent first.
 
-    Returns:
-        doc_count (int): total number of ingested documents.
-        chunk_count (int): total number of chunks.
-        avg_chunks_per_doc (float): average chunks per document, rounded to 1dp.
-        chunk_size_distribution (dict): chunk counts per token_count bucket.
-            Buckets: "0-99", "100-199", "200-299", "300-399", "400-499", "500+".
-            Only chunks with non-null token_count are included.
-
-    Not unit tested (DB-dependent). Called by Overview and Corpus route handlers
-    which pass request.app.state.pool.
+    Each entry: {timestamp, git_sha, k, rows: [{chunk_size, n_chunks, avg_precision, avg_recall, mrr}]}
     """
+    sweeps = []
+    for path in sorted(eval_dir.glob("chunk_sweep_*.jsonl"), reverse=True):
+        lines = path.read_text().strip().splitlines()
+        if not lines:
+            continue
+        meta = json.loads(lines[0])
+        rows = [json.loads(l) for l in lines[1:] if l.strip()]
+        sweeps.append({
+            "timestamp": meta.get("timestamp", path.stem.removeprefix("chunk_sweep_")),
+            "git_sha": meta.get("git_sha", ""),
+            "k": meta.get("k", 5),
+            "rows": rows,
+        })
+    return sweeps
+
+
+async def get_corpus_stats(pool: asyncpg.Pool) -> dict:
     async with pool.acquire() as conn:
         doc_count = await conn.fetchval("SELECT COUNT(*) FROM documents")
         chunk_count = await conn.fetchval("SELECT COUNT(*) FROM chunks")

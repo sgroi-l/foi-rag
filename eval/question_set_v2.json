@@ -1,0 +1,228 @@
+[
+  {
+    "question": "What was Camden Council's reason for not holding information about mobile phone bills claimed under expenses, and what was the original request asking for?",
+    "source_foi_reference": "CAM1281",
+    "expected_answer": "Camden Council stated they do not hold this information because they would not request such information from users who may have had excessive bills using mobile phones provided to employees, and noted the enquiry appears to be targeting corporate organisations rather than being applicable to their case. The original request asked for contract mobile phone bills claimed under expenses for the previous 24 months, listed individually (with personnel information omitted) on a monthly or yearly basis, including monthly costs and Boku Payments (a payment processor that uses phone pay-as-you-go credit or adds to the monthly bill).",
+    "relevant_chunk_ids": [
+      "34fd3c85-513b-47f6-9b20-0f1321c6c30a",
+      "27dff182-ea39-4877-9b60-35b09ca0b07a"
+    ]
+  },
+  {
+    "question": "What ITSM service tool does Camden Council currently use, and are there any plans to review it in the near future?",
+    "source_foi_reference": "CAM4337",
+    "expected_answer": "Camden Council currently uses Atlassian JIRA Service Management as their ITSM service tool. They have no plans to review it in the short to medium term.",
+    "relevant_chunk_ids": [
+      "a0cfe949-cd80-4a83-b9d5-d1038d250492",
+      "d6c96f2a-38e7-4ae4-bf18-9461ec8dcb0b"
+    ]
+  },
+  {
+    "question": "Regarding the FOI request about Camden's policy for changing locks to communal areas of street properties, did the council confirm that emails existed between the Director of Housing and the Housing department, and what should I do if I'm unhappy with how my request was handled?",
+    "source_foi_reference": "CAM4446",
+    "expected_answer": "Yes, Camden Council confirmed that emails did exist between the Director of Housing and the Housing or other council departments (including the member for Housing) concerning the proposed change in policy. If you are unhappy with how your response was handled, you can request an Internal Review within 2 months by emailing foireviews@camden.gov.uk or writing to the Information and Records Management Team, London Borough of Camden, Town Hall, Judd Street, London WC1H 9JE, quoting your case reference number.",
+    "relevant_chunk_ids": [
+      "221a8b27-a10a-4413-8cf1-30030da2f668",
+      "240d0941-3864-4c10-80af-3487c80555cd"
+    ]
+  },
+  {
+    "question": "As of early 2020, how many Camden Council employees were Camden residents, and which ward does Councillor Georgia Gould represent?",
+    "source_foi_reference": "FOI14134",
+    "expected_answer": "As of 31st March 2020, 655 out of 4278 directly employed Camden Council employees were identified as Camden residents. Councillor Georgia Gould represents Regent's Park Ward.",
+    "relevant_chunk_ids": [
+      "69134665-db87-46ed-9c81-821bc8167926",
+      "dd303418-a7ec-444c-bcb9-bd7967b07e5c"
+    ]
+  },
+  {
+    "question": "If I am unhappy with Camden Council's response to my FOI request about children housed in independent accommodation, what steps can I take and who can I contact?",
+    "source_foi_reference": "FOI12140",
+    "expected_answer": "You can first request an Internal Review within 2 months by emailing foireviews@camden.gov.uk or writing to the Information and Records Management Team at London Borough of Camden, Town Hall, Judd Street, London WC1H 9JE, quoting your case reference number. If still unsatisfied with the Internal Review outcome, you can complain to the Information Commissioner's Office at casework@ico.org.uk, by telephone on 0303 123 1113, or by post to Information Commissioner's Office, Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF.",
+    "relevant_chunk_ids": [
+      "239a2b7f-a2df-40e9-992f-a6c17675774f",
+      "aa79a929-fcbe-4629-927a-502ea9e9d708"
+    ]
+  },
+  {
+    "question": "What specific Council Tax exemption classes were requested in FOI CAM11626, and what level of geographic detail was asked for regarding the exempt properties?",
+    "source_foi_reference": "CAM11626",
+    "expected_answer": "The request covered Class E (properties left empty where the liable person is in hospital) and Class F (properties left empty following the death of the liable person). The requester asked for the number of properties in each full postcode (not just the outward or first-half code) where either of these exemptions are applied.",
+    "relevant_chunk_ids": [
+      "1e319dc8-d27b-4101-8a01-bd41d152d578",
+      "f35fd215-2073-4783-a5aa-701024cd7f1b"
+    ]
+  },
+  {
+    "question": "How many collisions involving cyclists have been reported near the raised cycling lane outside the Royal Langford Apartments since 2020, and were any of these collisions after the protected cycle lane was completed?",
+    "source_foi_reference": "CAM10712",
+    "expected_answer": "There have been two reported collisions involving pedal cyclists since 2020: one on Wednesday 16 February 2022 (involving a pedal cycle and a van/goods vehicle near the junction of Kilburn High Road and Greville Road) and one on Friday 10 May 2024 (involving a pedal cycle and a taxi/private hire vehicle on Greville Road near Kilburn High Road). Both collisions occurred prior to the installation of the protected cycle lane, which was completed earlier in 2025. However, a wand-protected cycle lane had been in place since 2021.",
+    "relevant_chunk_ids": [
+      "a2917fe1-4b45-4b8a-859b-9581e74c62aa",
+      "99261024-b568-4955-a98d-e8d337df50de"
+    ]
+  },
+  {
+    "question": "Why did Camden Council say they don't hold a Microsoft Licensing Statement, and what legal basis did they cite for not having to obtain this information?",
+    "source_foi_reference": "CAM5749",
+    "expected_answer": "Camden Council stated they don't hold a Microsoft Licensing Statement because they have never requested one from Microsoft. The legal basis cited is Section 3(2)(b) of the Freedom of Information Act 2000, which only gives access to information already held by public authorities and does not require them to create or obtain information from third parties where they do not hold any relevant information on their behalf.",
+    "relevant_chunk_ids": [
+      "c9e0dbec-03fa-4445-89a9-b69295b40d04",
+      "e9fccacd-b1aa-4b7b-ae86-793ab28d5721"
+    ]
+  },
+  {
+    "question": "Does Camden Council hold information about the SSCF NE neighbourhood management arrangements and baseline surveys, and if not, why not?",
+    "source_foi_reference": "CAM6510",
+    "expected_answer": "Camden Council does not hold this information, including documentation on neighbourhood management arrangements, mandatory local resident baseline surveys, and evaluations of SSCF NE performance. This is because the request covers a period outside of their retention policy for contracts, fund managers quarterly reports and financial data.",
+    "relevant_chunk_ids": [
+      "5e04fef6-220d-4c96-9910-62a1effe6b75",
+      "2a2e3c6d-1b6d-4654-b955-7a5e0677c917"
+    ]
+  },
+  {
+    "question": "What are the requirements for drug and alcohol rehabilitation providers to be on Camden's approved framework, and how much would a 12-week placement typically cost for a client with complex needs?",
+    "source_foi_reference": "CAM2849",
+    "expected_answer": "To be on Camden's approved framework, providers must go through a tender process, provide evidence they can deliver services safely and effectively, have appropriate clinical and therapeutic protocols and standards, be CQC registered, and be able to adhere to data collection and monitoring processes. For a client with complex needs requiring more intensive support, an average 12-week stay would cost approximately \u00a312,000.",
+    "relevant_chunk_ids": [
+      "1f1a693a-f993-465e-ae23-25a8c54123df",
+      "4b8f16a6-2999-4b91-a377-28ff5381ba56"
+    ]
+  },
+  {
+    "question": "Why has Camden Council withheld postcode-level address data in response to the SEN2 FOI request, and which specific legal exemptions have been applied?",
+    "source_foi_reference": "CAM10089",
+    "expected_answer": "Camden Council has withheld postcode-level address data citing two legal exemptions: Section 40 (personal data), on the grounds that releasing it would breach UK GDPR and the Data Protection Act 2018 requirements of fairness and proportionality since the information could identify living individuals; and Section 38 (Health and Safety), on the grounds that releasing residential postcode-level addresses of children, young people, and their families could endanger their physical or mental health or safety by enabling identification and location of individuals, potentially leading to distress or harm. Both exemptions are strengthened by the fact that FOI responses are published publicly and not limited to the original requester.",
+    "relevant_chunk_ids": [
+      "1fadee53-ac63-4414-8d42-c2069257ea39",
+      "eac2811a-b34d-4bd1-8e29-e1334fb8ca46"
+    ]
+  },
+  {
+    "question": "Did Camden Council make any compulsory purchase orders of homes registered to owners in Russia between 2020 and 2022, and what FOI request reference covers this topic?",
+    "source_foi_reference": "CAM4140",
+    "expected_answer": "No, Camden Council made no compulsory purchase orders of homes registered to owners in Russia since 2020. This information was provided in response to FOI request reference CAM4140, submitted on 28/10/2022.",
+    "relevant_chunk_ids": [
+      "6ab71df1-9c40-432e-9fed-891e29edd863",
+      "a8784d11-39ad-41d3-8acb-28d586f3c834"
+    ]
+  },
+  {
+    "question": "Does Camden Council use chemicals like glyphosate in its nature conservation or relaxed mowing areas, and what is the overall philosophy behind its grounds maintenance approach?",
+    "source_foi_reference": "CAM676",
+    "expected_answer": "Camden Council does not use chemicals for weed control in nature conservation areas, flower beds, lawns, or tree bases. Glyphosate is only used on hard standings like pavements, roads and paths that the council is obligated to keep weed free. Camden's overall grounds maintenance approach is nature conservation led, aiming to replace high frequency, high cost tasks with more sustainable low maintenance alternatives, such as replacing general amenity grass cutting with relaxed mowing, to improve biodiversity while maintaining or reducing costs.",
+    "relevant_chunk_ids": [
+      "4f37f9c5-7c3e-4ee4-a020-87e920c1f52e",
+      "f57995d5-5ee8-4beb-ac0f-a244c989507e"
+    ]
+  },
+  {
+    "question": "Has Camden's Virtual School ever made a request for tuition through the National Tutoring Programme Tuition Hub, and if so, how many children have received support since the NTP began?",
+    "source_foi_reference": "CAM2556",
+    "expected_answer": "Camden Virtual School has not ever raised a request for tuition with NTP Tutoring Partners through the NTP Tuition Hub. However, they anticipated making referrals that term and encouraging schools to do so as well.",
+    "relevant_chunk_ids": [
+      "d0cb9abf-e9cc-4846-bc1c-5550affd9498",
+      "8fcdc46d-a497-4e1a-a6b9-5275ac16dc2b"
+    ]
+  },
+  {
+    "question": "How many times was Camden's hot weather SWEP activated between 31 May 2025 and 1 September 2025, and what additional measures were taken during amber alert activations compared to yellow alert activations?",
+    "source_foi_reference": "CAM12026",
+    "expected_answer": "Camden's hot weather SWEP was activated 10 times between 31 May 2025 and 1 September 2025. During yellow alerts, outreach activity is increased to provide advice, monitor for heat-related illness, distribute essential items such as suncream, water, hats and snacks, and direct people to designated cool spaces and water fountains. During amber alerts, these measures are intensified and additional accommodation is provided, with closer work with health partners.",
+    "relevant_chunk_ids": [
+      "25e82a69-b9d9-4992-91ae-82e3b761c78c",
+      "f92337ed-b1f0-45f9-b675-eab1a002a151",
+      "770161e4-a46d-4dfa-b967-e4c93035d28c"
+    ]
+  },
+  {
+    "question": "How many council-run allotments does Camden have, and what is the total number of people on the waiting lists across all sites?",
+    "source_foi_reference": "CAM9805",
+    "expected_answer": "Camden has 4 council-run allotments: Antrim Grove, Branch Hill, Fitzroy Park, and Westcroft Estate. The total number of people on waiting lists across all sites is 55 + 151 + 126 + 24 = 356 people.",
+    "relevant_chunk_ids": [
+      "eeadcc72-88a2-48aa-852d-c8cb920dc232",
+      "8151acc8-b513-4fcd-8c17-8881fac92dab"
+    ]
+  },
+  {
+    "question": "How many total plots are there across all Camden Council allotment sites, and are these plots rented at a fixed price per plot or by size?",
+    "source_foi_reference": "FOI11550",
+    "expected_answer": "There are 215 total plots across all sites (Antrim Grove: 36, Branch Hill: 28, Fitzroy Park: 97, Westcroft Estate: 54). Plots are rented as either a Full Plot or Half Plot size, but none are to scale or identical in measurement.",
+    "relevant_chunk_ids": [
+      "3890ed78-d129-4f91-bb9f-a5929276766c",
+      "ee3370ad-c969-442b-81f4-4780a62a25cf"
+    ]
+  },
+  {
+    "question": "I submitted an FOI request about a Temporary Events Notice for Clean Kitchen Club Camden at Buck Street Market. What was the outcome of my request, and what can I do if I'm unhappy with how it was handled?",
+    "source_foi_reference": "CAM2114",
+    "expected_answer": "Camden Council found no records of a Temporary Events Notice (TEN) for Clean Kitchen Club Camden at Buck Street Market, 198 Camden High Street, London NW1 8QP. If you are unhappy with how the response was handled, you can request an Internal Review within 2 months by emailing foireviews@camden.gov.uk or writing to the Information and Records Management Team, London Borough of Camden, Town Hall, Judd Street, London WC1H 9JE, quoting your case reference number (CAM2114). If still unsatisfied after the Internal Review, you can complain to the Information Commissioner's Office.",
+    "relevant_chunk_ids": [
+      "efb3d505-9d80-4727-8107-d50802752d59",
+      "c047ab46-86a7-4764-825e-335b101be7e0"
+    ]
+  },
+  {
+    "question": "I submitted an FOI request asking about parking PCNs issued on Kidderpore Avenue and nearby streets, and also about responses to the Healthy Streets consultation for the KFK area. How did Camden Council respond to these requests?",
+    "source_foi_reference": "CAM8097",
+    "expected_answer": "Camden Council responded by directing the requester to a FAQ document available online, citing Regulation 6(1) which allows public bodies to direct requesters to information that is readily accessible elsewhere. The FAQ was created due to the high number of repeated information requests on the Healthy School Streets scheme for St Margarets School and St Lukes CoE School, and it covers answers to the four topics asked about, including the number of responses in favour of and against the Healthy Streets scheme. Camden also warned that if multiple requesters are acting in concert as part of a campaign to disrupt the organisation through the sheer weight of FOI requests, future requests may be refused as vexatious under Section 14(1) of the Freedom of Information Act 2000.",
+    "relevant_chunk_ids": [
+      "6bb5e897-6c13-4e9a-bcbc-fff2667fc164",
+      "b6185c9a-cb99-40c1-b21b-55d198aab10e"
+    ]
+  },
+  {
+    "question": "How many grants did Camden Council award through competitive/open processes in 2019/20, and were there any legal challenges to grant decisions in that year?",
+    "source_foi_reference": "CAM3577",
+    "expected_answer": "In 2019/20, Camden awarded 125 individual grants totalling \u00a35,181,630. All grants were provided through an open/competitive process except for the \u00a3100K per annum 'Organisational Development Fund' (which provides up to 20 grants of maximum \u00a35K each). No formal challenges were received about grant processes and decisions on the basis of alleged non-compliance with state aid, subsidy control, or public procurement regulations, and therefore no legal proceedings resulted.",
+    "relevant_chunk_ids": [
+      "1d975646-226c-475a-b36e-039b9cd95afb",
+      "1d81a024-24c9-45c2-8bd0-d8de505d8066"
+    ]
+  },
+  {
+    "question": "How many Traveller pupils are entitled to Free School Meals in Camden, and does Camden have any dedicated support officer for Traveller families?",
+    "source_foi_reference": "CAM3039",
+    "expected_answer": "There are 34 Traveller pupils entitled to Free School Meals in Camden (32 in state-funded primary and 2 in state-funded secondary schools, based on School Census Spring term 2022). Camden no longer has a dedicated support officer for Traveller families \u2014 the School Inclusion Team previously had a specific officer who worked with Traveller families, but the post was deleted 10 years ago due to there no longer being any Traveller sites in Camden.",
+    "relevant_chunk_ids": [
+      "448618c7-412c-4c57-bfda-0ad28c126e07",
+      "0a857bb6-45a1-4bcc-bbbc-7fb67c7ae1bf"
+    ]
+  },
+  {
+    "question": "Does Camden Council use an external contractor for PAT testing in its office buildings, and is there a formal contract in place for this service?",
+    "source_foi_reference": "CAM1600",
+    "expected_answer": "No, Camden Council does not use an external contractor for PAT testing in its office buildings. The testing is carried out by in-house electricians, and therefore there is no external PAT testing contract or contract renewal date.",
+    "relevant_chunk_ids": [
+      "566e2465-ed7f-4cb5-b3a6-114c4a40930f",
+      "5b8dca69-cfa5-4cad-914f-a1235b0310e3"
+    ]
+  },
+  {
+    "question": "Who is responsible for Camden Council's telephony system contract, and what email address can they be contacted at?",
+    "source_foi_reference": "CAM3327",
+    "expected_answer": "The responsible person for the telephony contract is Mr Jhon Jimenez, Network Team Lead. The email address for the primary contact would be found in chunk 1, which contains the answer to question 6 about the email address of the primary contact for the contract.",
+    "relevant_chunk_ids": [
+      "70c5c97e-2ad5-40b8-860b-d12765d2561b",
+      "9044e702-1e99-48ca-8171-f442a56df353"
+    ]
+  },
+  {
+    "question": "Who created the public artwork at 5 Pancras Square and how was the \u00a3100,000 budget broken down between the artwork itself and its manufacture and installation?",
+    "source_foi_reference": "FOI11552",
+    "expected_answer": "The artist for the public art at the top south eastern corner of 5 Pancras Square was Mark Titchner. Of the \u00a3100,000 budget, \u00a321,000 was for the artwork itself and \u00a341,180 was for manufacture and installation.",
+    "relevant_chunk_ids": [
+      "f257fdad-263c-4ecc-9b02-ab5c2a60be2f",
+      "ab8ec1b9-1a1c-40e8-b573-cdb73a45b405"
+    ]
+  },
+  {
+    "question": "According to Camden Council's FOI response CAM1018, what were the average waiting times for council housing repairs in the first four months of 2020, and when was this information provided?",
+    "source_foi_reference": "CAM1018",
+    "expected_answer": "The average waiting times for council housing repairs in the first four months of 2020 were: 31st January 2020 \u2013 18 days, 29th February 2020 \u2013 17 days, 31st March 2020 \u2013 19 days, and 30th April 2020 \u2013 20 days. This information was provided on 20th January 2021 in response to a request dated 13th January 2021.",
+    "relevant_chunk_ids": [
+      "2c6718f4-ded6-49e4-8b0f-23b4a6fbc1da",
+      "d1cbf3fb-5d28-4bf8-a3f9-e40b5e56c885"
+    ]
+  }
+]

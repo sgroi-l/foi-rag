@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 
-from src.api.dashboard_utils import get_corpus_stats, parse_run_file, read_eval_runs
+from src.api.dashboard_utils import get_corpus_stats, parse_run_file, read_chunk_sweeps, read_eval_runs
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
@@ -46,10 +46,12 @@ async def corpus(request: Request):
 async def eval_page(request: Request):
     """Eval page: recall/faithfulness trend chart, run summary table, run comparison."""
     runs = read_eval_runs(EVAL_DIR)
+    chunk_sweeps = read_chunk_sweeps(EVAL_DIR)
     return templates.TemplateResponse("dashboard/eval.html", {
         "request": request,
         "active": "eval",
         "runs": runs,
+        "chunk_sweeps": chunk_sweeps,
     })
 
 

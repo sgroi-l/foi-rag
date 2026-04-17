@@ -15,20 +15,16 @@
     </div>
     {% if latest %}
     <div class="stat-card">
-        <div class="stat-label">Recall@{{ latest.metadata.rerank_top_k if latest.metadata else 'K' }}</div>
-        <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.recall * 100) }}%</div>
+        <div class="stat-label">Recall@{{ latest.summary.k or 'K' }}</div>
+        <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.avg_recall * 100) }}%</div>
     </div>
     <div class="stat-card">
-        <div class="stat-label">Precision@{{ latest.metadata.rerank_top_k if latest.metadata else 'K' }}</div>
-        <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.precision * 100) ~ "%" if latest.summary.precision is not none else "—" }}</div>
+        <div class="stat-label">Precision@{{ latest.summary.k or 'K' }}</div>
+        <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.avg_precision * 100) }}%</div>
     </div>
     <div class="stat-card">
-        <div class="stat-label">F1</div>
-        <div class="stat-value" style="color: var(--peach, #fab387)">{{ "%.2f"|format(latest.summary.f1) if latest.summary.f1 is not none else "—" }}</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Faithfulness</div>
-        <div class="stat-value" style="color: var(--yellow)">{{ "%.1f"|format(latest.summary.mean_faithfulness) }}/5</div>
+        <div class="stat-label">MRR</div>
+        <div class="stat-value" style="color: var(--peach, #fab387)">{{ "%.2f"|format(latest.summary.mrr) }}</div>
     </div>
     {% else %}
     <div class="stat-card">
@@ -40,11 +36,7 @@
         <div class="stat-value" style="color: var(--subtle)">—</div>
     </div>
     <div class="stat-card">
-        <div class="stat-label">F1</div>
-        <div class="stat-value" style="color: var(--subtle)">—</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Faithfulness</div>
+        <div class="stat-label">MRR</div>
         <div class="stat-value" style="color: var(--subtle)">—</div>
     </div>
     {% endif %}
@@ -62,49 +54,27 @@
         <div class="info-row">{{ latest.timestamp }}</div>
         {% if latest.metadata %}
         <div class="info-subtle">git: {{ latest.metadata.git_sha }}</div>
-        <div class="info-subtle">{{ latest.summary.total }} questions · rerank_top_k: {{ latest.metadata.rerank_top_k }}</div>
-        {% endif %}
-        {% if latest.summary.judge_errors %}
-        <div class="info-subtle" style="color: var(--yellow)">{{ latest.summary.judge_errors }} judge error(s) excluded from mean</div>
+        <div class="info-subtle">{{ latest.summary.total }} questions · k={{ latest.summary.k }}</div>
         {% endif %}
     </div>
     {% endif %}
 </div>
 
 <script>
-// Runs are newest-first; reverse so chart reads left=oldest, right=newest
 const runs = {{ runs | tojson }};
 const labels = runs.map(r => r.timestamp).reverse();
-const recalls = runs.map(r => r.summary.recall).reverse();
-const precisions = runs.map(r => r.summary.precision).reverse();
-const f1s = runs.map(r => r.summary.f1).reverse();
-const recallLabel = 'Recall@' + (runs[0]?.metadata?.rerank_top_k ?? 'K');
+const recalls = runs.map(r => r.summary.avg_recall).reverse();
+const precisions = runs.map(r => r.summary.avg_precision).reverse();
+const mrrs = runs.map(r => r.summary.mrr).reverse();
+const k = runs[0]?.summary?.k ?? 'K';
 new Chart(document.getElementById('recallChart'), {
     type: 'line',
     data: {
         labels,
         datasets: [
-            {
-                label: recallLabel,
-                data: recalls,
-                borderColor: '#89b4fa',
-                backgroundColor: '#89b4fa22',
-                tension: 0.2,
-            },
-            {
-                label: 'Precision@K',
-                data: precisions,
-                borderColor: '#fab387',
-                backgroundColor: '#fab38722',
-                tension: 0.2,
-            },
-            {
-                label: 'F1',
-                data: f1s,
-                borderColor: '#cba6f7',
-                backgroundColor: '#cba6f722',
-                tension: 0.2,
-            }
+            { label: `Recall@${k}`, data: recalls, borderColor: '#89b4fa', backgroundColor: '#89b4fa22', tension: 0.2 },
+            { label: `Precision@${k}`, data: precisions, borderColor: '#fab387', backgroundColor: '#fab38722', tension: 0.2 },
+            { label: 'MRR', data: mrrs, borderColor: '#cba6f7', backgroundColor: '#cba6f722', tension: 0.2 },
         ]
     },
     options: {
