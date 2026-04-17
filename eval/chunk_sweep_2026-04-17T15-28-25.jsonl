@@ -1,0 +1,5 @@
+{"_type": "chunk_sweep_metadata", "timestamp": "2026-04-17T15-28-25", "git_sha": "aab8417", "k": 5}
+{"chunk_size": 128, "n_chunks": 772, "avg_precision": 0.752, "avg_recall": 0.88, "mrr": 0.92}
+{"chunk_size": 256, "n_chunks": 375, "avg_precision": 0.6000000000000001, "avg_recall": 0.96, "mrr": 0.98}
+{"chunk_size": 512, "n_chunks": 213, "avg_precision": 0.6, "avg_recall": 1.0, "mrr": 0.98}
+{"chunk_size": 1024, "n_chunks": 189, "avg_precision": 0.568, "avg_recall": 1.0, "mrr": 0.98}

@@ -1,4 +1,4 @@
-.PHONY: dev up down reset logs psql download ingest api generate-eval-set eval
+.PHONY: dev up down reset logs psql download ingest api generate-eval-set eval generate-prod eval-prod
 
 # Start db + run API locally with hot reload
 dev:
@@ -33,10 +33,23 @@ download:
 ingest:
 	uv run python3 scripts/ingest_all.py
 
-# Generate synthetic evaluation question set (run once)
+# Generate synthetic evaluation question set locally
 generate-eval-set:
-	uv run python3 scripts/generate_eval_set.pyde 
+	uv run python3 eval/generate_questions.py
 
-# Run the evaluation harness
+# Run the evaluation harness locally
 eval:
 	uv run python3 scripts/evaluate.py
+
+# Generate eval question set from production k8s DB, copy back locally
+generate-prod:
+	kubectl exec -n foi-rag deployment/foi-rag-api -- rm -f eval/question_set_v2.json
+	kubectl exec -n foi-rag deployment/foi-rag-api -- uv run eval/generate_questions.py
+	POD=$$(kubectl get pod -n foi-rag -l app=foi-rag-api -o jsonpath='{.items[0].metadata.name}') && \
+		kubectl cp foi-rag/$$POD:/app/eval/question_set_v2.json eval/question_set_v2.json
+
+# Run eval harness on production k8s, copy results back locally
+eval-prod:
+	kubectl exec -n foi-rag deployment/foi-rag-api -- uv run scripts/evaluate.py
+	POD=$$(kubectl get pod -n foi-rag -l app=foi-rag-api -o jsonpath='{.items[0].metadata.name}') && \
+		kubectl cp foi-rag/$$POD:/app/eval/ eval/

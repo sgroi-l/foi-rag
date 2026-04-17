@@ -16,11 +16,11 @@
     {% if latest %}
     <div class="stat-card">
         <div class="stat-label">Recall@{{ latest.summary.k or 'K' }}</div>
-        <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.avg_recall * 100) }}%</div>
+        <div class="stat-value" style="color: var(--green)">{{ "%.0f"|format(latest.summary.recall * 100) }}%</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">Precision@{{ latest.summary.k or 'K' }}</div>
-        <div class="stat-value" style="color: var(--blue)">{{ "%.0f"|format(latest.summary.avg_precision * 100) }}%</div>
+        <div class="stat-value" style="color: var(--blue)">{% if latest.summary.precision is not none %}{{ "%.0f"|format(latest.summary.precision * 100) }}%{% else %}—{% endif %}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">MRR</div>
@@ -63,8 +63,8 @@
 <script>
 const runs = {{ runs | tojson }};
 const labels = runs.map(r => r.timestamp).reverse();
-const recalls = runs.map(r => r.summary.avg_recall).reverse();
-const precisions = runs.map(r => r.summary.avg_precision).reverse();
+const recalls = runs.map(r => r.summary.recall).reverse();
+const precisions = runs.map(r => r.summary.precision).reverse();
 const mrrs = runs.map(r => r.summary.mrr).reverse();
 const k = runs[0]?.summary?.k ?? 'K';
 new Chart(document.getElementById('recallChart'), {

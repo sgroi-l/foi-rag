@@ -25,8 +25,8 @@
             <td style="color: var(--subtle)">{{ run.metadata.git_sha if run.metadata else '—' }}</td>
             <td>{{ run.summary.k or '—' }}</td>
             <td>{{ run.summary.total }}</td>
-            <td class="hit">{{ "%.0f"|format(run.summary.avg_recall * 100) }}%</td>
-            <td style="color: var(--blue, #89b4fa)">{{ "%.0f"|format(run.summary.avg_precision * 100) }}%</td>
+            <td class="hit">{{ "%.0f"|format(run.summary.recall * 100) }}%</td>
+            <td style="color: var(--blue, #89b4fa)">{% if run.summary.precision is not none %}{{ "%.0f"|format(run.summary.precision * 100) }}%{% else %}—{% endif %}</td>
             <td style="color: var(--peach, #fab387)">{{ "%.2f"|format(run.summary.mrr) }}</td>
         </tr>
         {% endfor %}
@@ -151,8 +151,8 @@ renderSweep();
 <script>
 const runs = {{ runs | tojson }};
 const labels = runs.map(r => r.timestamp).reverse();
-const recalls = runs.map(r => r.summary.avg_recall).reverse();
-const precisions = runs.map(r => r.summary.avg_precision).reverse();
+const recalls = runs.map(r => r.summary.recall).reverse();
+const precisions = runs.map(r => r.summary.precision).reverse();
 const mrrs = runs.map(r => r.summary.mrr).reverse();
 const k = runs[0]?.summary?.k ?? 'K';
 
@@ -198,8 +198,8 @@ function renderComparison() {
     const pct = v => v != null ? `${(v * 100).toFixed(0)}%` : '—';
     const fmt = v => v != null ? v.toFixed(2) : '—';
     summary.innerHTML =
-        `<strong>Run A:</strong> ${pct(a.summary.avg_recall)} recall, ${pct(a.summary.avg_precision)} precision, ${fmt(a.summary.mrr)} MRR &nbsp;|&nbsp; ` +
-        `<strong>Run B:</strong> ${pct(b.summary.avg_recall)} recall, ${pct(b.summary.avg_precision)} precision, ${fmt(b.summary.mrr)} MRR`;
+        `<strong>Run A:</strong> ${pct(a.summary.recall)} recall, ${pct(a.summary.precision)} precision, ${fmt(a.summary.mrr)} MRR &nbsp;|&nbsp; ` +
+        `<strong>Run B:</strong> ${pct(b.summary.recall)} recall, ${pct(b.summary.precision)} precision, ${fmt(b.summary.mrr)} MRR`;
 
     const bByQ = {};
     for (const r of b.records) bByQ[r.question] = r;
