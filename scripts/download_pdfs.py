@@ -1,6 +1,5 @@
 import re
 import time
-import random
 from pathlib import Path
 from urllib.parse import urlparse
 from io import StringIO
@@ -15,8 +14,7 @@ OUTPUT_DIR = Path("camden_foi_random_pdfs")
 PDF_DIR = OUTPUT_DIR / "pdfs"
 METADATA_CSV = OUTPUT_DIR / "downloaded_pdf_metadata.csv"
 
-N_SAMPLE = 40
-RANDOM_SEED = 42
+N_SAMPLE = 1000
 REQUEST_TIMEOUT = 60
 SLEEP_BETWEEN_DOWNLOADS = 0.25
 
@@ -100,7 +98,6 @@ def download_file(url: str, out_path: Path) -> tuple[bool, str | None, int | Non
 
 
 def main():
-    random.seed(RANDOM_SEED)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     PDF_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -138,8 +135,10 @@ def main():
     if len(pdf_df) == 0:
         raise ValueError("No PDF links found in the dataset.")
 
+    pdf_df["Document Date"] = pd.to_datetime(pdf_df["Document Date"], errors="coerce")
+    pdf_df = pdf_df.sort_values("Document Date", ascending=False)
     n_to_sample = min(N_SAMPLE, len(pdf_df))
-    sample_df = pdf_df.sample(n=n_to_sample, random_state=RANDOM_SEED).reset_index(drop=True)
+    sample_df = pdf_df.head(n_to_sample).reset_index(drop=True)
 
     metadata_rows = []
 
