@@ -2,7 +2,7 @@
 
 Complete checklist for deploying foi-rag to the Hetzner CX33 server.
 
-**Server IP:** 135.181.255.239
+**Server IP:** 135.181.192.141
 **Domain:** foi-rag.sgroi.dev
 **Docker Hub:** sgroil
 
@@ -10,7 +10,7 @@ Complete checklist for deploying foi-rag to the Hetzner CX33 server.
 
 ## One-time server setup
 
-- [x] SSH access already configured — connect as: `ssh sgroil@135.181.255.239 -i ~/.ssh/fac_key`
+- [x] SSH access already configured — connect as: `ssh sgroil@135.181.192.141 -i ~/.ssh/fac_key`
 - [x] Deploy user (`sgroil`) already exists with sudo access
 - [ ] Open firewall:
   ```bash
@@ -55,7 +55,7 @@ Complete checklist for deploying foi-rag to the Hetzner CX33 server.
 
 ## First deploy
 
-- [ ] Add DNS A record in Cloudflare: `foi-rag.sgroi.dev` → `135.181.255.239`, TTL 300
+- [ ] Add DNS A record in Cloudflare: `foi-rag.sgroi.dev` → `135.181.192.141`, TTL 300
 - [ ] Add GitHub repo secrets (Settings → Secrets and variables → Actions):
   | Secret | Value |
   |---|---|
@@ -65,7 +65,7 @@ Complete checklist for deploying foi-rag to the Hetzner CX33 server.
 
   Get KUBECONFIG_DATA on the server:
   ```bash
-  sudo cat /etc/rancher/k3s/k3s.yaml | sed "s/127.0.0.1/135.181.255.239/" | base64 -w 0
+  sudo cat /etc/rancher/k3s/k3s.yaml | sed "s/127.0.0.1/135.181.192.141/" | base64 -w 0
   ```
 - [ ] Create namespace: `kubectl create namespace foi-rag`
 - [ ] Create secrets on the server:
